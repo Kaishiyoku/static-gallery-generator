@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel Lumen (6.3.3) (Laravel Components ^6.0) on 2020-02-12 20:32:04.
+ * Generated for Laravel Lumen (6.3.3) (Laravel Components ^6.0) on 2020-02-12 21:10:09.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *

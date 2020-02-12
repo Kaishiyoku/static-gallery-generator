@@ -1,6 +1,9 @@
 /vendor
 /.idea
 /storage/logs
+/public/galleries
+/storage/app/galleries
+/public/index.html
 Homestead.json
 Homestead.yaml
 .env
