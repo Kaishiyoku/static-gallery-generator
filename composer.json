@@ -6,12 +6,15 @@
     "type": "project",
     "require": {
         "php": "^7.2",
-        "laravel/lumen-framework": "^6.0"
+        "laravel/lumen-framework": "^6.0",
+        "league/flysystem": "^1.0"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.6",
         "fzaninotto/faker": "^1.4",
-        "phpunit/phpunit": "^8.0",
-        "mockery/mockery": "^1.0"
+        "laravelista/lumen-vendor-publish": "6.0",
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "classmap": [
@@ -30,6 +33,11 @@
     "scripts": {
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "ide-helper": [
+            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:meta",
+            "php artisan ide-helper:models --write"
         ]
     },
     "config": {
