@@ -74,14 +74,14 @@ class BuildGalleries extends Command
 
             $htmlFileName = '/galleries/' . $parts[array_key_last($parts)] . '.html';
 
-            $publicFilesystem->put($htmlFileName, $view->toHtml());
+            $publicFilesystem->put($htmlFileName, minifyHtml($view->toHtml()));
 
             return $htmlFileName;
         });
 
         $indexPageView = view('index', ['galleries' => $htmlFileNames]);
 
-        $publicFilesystem->put('index.html', $indexPageView);
+        $publicFilesystem->put('index.html', minifyHtml($indexPageView->toHtml()));
 
         $this->line('Finished.');
     }
