@@ -45,6 +45,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if (app()->environment() !== 'production') {
+            $whoops = new \Whoops\Run();
+            $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+            $whoops->register();
+
+            return $whoops->handleException($exception);
+        }
+
         return parent::render($request, $exception);
     }
 }

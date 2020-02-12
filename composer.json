@@ -11,6 +11,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.6",
+        "filp/whoops": "^2.7",
         "fzaninotto/faker": "^1.4",
         "laravelista/lumen-vendor-publish": "6.0",
         "mockery/mockery": "^1.0",
