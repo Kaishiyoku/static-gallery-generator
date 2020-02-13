@@ -1,12 +1,12 @@
 @extends('app')
 
-@section('title', $galleryInfo->name)
+@section('title', optional($gallery->getGalleryInfo())->getName())
 
 @section('content')
-    @foreach ($files as $file)
+    @foreach ($gallery->getImages() as $image)
         <div>
-            <a data-fslightbox href="/{{ $file }}">
-                <img src="/{{ $file }}"/>
+            <a data-fslightbox href="/{{ $image->getPath() }}">
+                <img src="/{{ $image->getPath() }}" alt="{{ $image->getBasename() }}"/>
             </a>
         </div>
     @endforeach

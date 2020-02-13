@@ -21,3 +21,11 @@ use Laravel\Lumen\Routing\Router;
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+if ($router->app->environment() !== 'production') {
+    $router->get('/build', function () use ($router) {
+        Artisan::call('galleries:build');
+
+        return Artisan::output();
+    });
+}

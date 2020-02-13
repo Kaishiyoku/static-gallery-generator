@@ -2,8 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Gallery;
+use App\Image;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use League\Flysystem\Adapter\Local;
@@ -42,47 +43,46 @@ class BuildGalleries extends Command
      */
     public function handle()
     {
-        $galleryDirectoryPaths = collect(Storage::disk('local')->directories('galleries'));
-
-        $galleries = $galleryDirectoryPaths->mapWithKeys(function ($galleryDirectoryPath) {
-            return [$galleryDirectoryPath => collect(Storage::disk('local')->allFiles($galleryDirectoryPath))];
-        });
-
+        $localStorage = Storage::disk('local');
         $publicAdapter = new Local(publicPath());
         $publicFilesystem = new Filesystem($publicAdapter);
 
-        $htmlFileNames = $galleries->map(function (Collection $gallery, $galleryDirectoryPath) use ($publicFilesystem) {
-            $gallery
-                ->filter(function ($file) {
-                    return !Str::endsWith($file, '.json'); // TODO: only allow images
-                })
-                ->each(function ($file) use ($publicFilesystem) {
-                    $publicFilesystem->put($file, Storage::disk('local')->get($file));
-                });
+        $galleries = collect($localStorage->listContents('/galleries'))
+            ->filter(function ($data) {
+                return $data['type'] === 'dir';
+            })
+            ->map(function ($data) use ($localStorage) {
+                $images = collect($localStorage->listContents($data['path']))
+                    ->filter(function ($data) use ($localStorage) {
+                        $mimetype = $localStorage->getMimetype($data['path']);
 
-            $galleryInfo = json_decode(Storage::disk('local')->get(
-                $gallery
-                    ->filter(function ($file) {
-                        return Str::endsWith($file, '.json');
+                        $isDirectory = $data['type'] === 'dir';
+                        $isImage = Str::startsWith($mimetype, 'image/');
+
+                        return !$isDirectory && $isImage;
                     })
-                    ->first()
-            ), false, 512, JSON_THROW_ON_ERROR);
+                    ->map(function ($data) {
+                        return Image::fromArray($data);
+                    });
 
-            $parts = explode('/', $galleryDirectoryPath);
-            $view = view('gallery', ['files' => $gallery->filter(function ($file) {
-                return !Str::endsWith($file, '.json'); // TODO: only allow images
-            }), 'galleryInfo' => $galleryInfo]);
+                $galleryInfoPath = $data['path'] . '/info.json';
 
-            $htmlFileName = '/galleries/' . $parts[array_key_last($parts)] . '.html';
+                $galleryInfoJsonStr = $localStorage->exists($galleryInfoPath) ? $localStorage->get($galleryInfoPath) : null;
 
-            $publicFilesystem->put($htmlFileName, minifyHtml($view->toHtml()));
+                return new Gallery($data['basename'], $data['path'], $images, $galleryInfoJsonStr);
+            })
+            ->each(function (Gallery $gallery) use ($publicFilesystem) {
+                $view = view('gallery', ['gallery' => $gallery]);
 
-            return $htmlFileName;
-        });
+                $publicFilesystem->put($gallery->getPath() . '.html', $view->toHtml());
+            })
+            ->map(function (Gallery $gallery) {
+                return '/galleries/' . $gallery->getBasename() . '.html';
+            });
 
-        $indexPageView = view('index', ['galleries' => $htmlFileNames]);
+        $indexPageView = view('index', ['galleries' => $galleries]);
 
-        $publicFilesystem->put('index.html', minifyHtml($indexPageView->toHtml()));
+        $publicFilesystem->put('index.html', $indexPageView->toHtml());
 
         $this->line('Finished.');
     }
