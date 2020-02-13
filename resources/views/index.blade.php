@@ -3,11 +3,15 @@
 @section('title', 'Galleries')
 
 @section('content')
-    <ul>
-        @foreach ($galleries as $gallery)
-            <li>
-                <a href="{{ $gallery }}">{{ $gallery }}</a>
-            </li>
-        @endforeach
-    </ul>
+    <div class="container">
+        <ul class="list-style-none">
+            @foreach ($galleries as $gallery)
+                <li>
+                    <a href="{{ $gallery->getPath() }}.html" class="lg">
+                        {{ optional($gallery->getGalleryInfo())->getName() ?? $gallery->getBaseName() }}
+                    </a>
+                </li>
+            @endforeach
+        </ul>
+    </div>
 @endsection

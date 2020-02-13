@@ -51,7 +51,7 @@ class BuildGalleries extends Command
             ->filter(function ($data) {
                 return $data['type'] === 'dir';
             })
-            ->map(function ($data) use ($localStorage) {
+            ->map(function ($data) use ($localStorage, $publicFilesystem) {
                 $images = collect($localStorage->listContents($data['path']))
                     ->filter(function ($data) use ($localStorage) {
                         $mimetype = $localStorage->getMimetype($data['path']);
@@ -65,6 +65,10 @@ class BuildGalleries extends Command
                         return Image::fromArray($data);
                     });
 
+                $images->each(function (Image $image) use ($localStorage, $publicFilesystem) {
+                    $publicFilesystem->put($image->getPath(), $localStorage->get($image->getPath()));
+                });
+
                 $galleryInfoPath = $data['path'] . '/info.json';
 
                 $galleryInfoJsonStr = $localStorage->exists($galleryInfoPath) ? $localStorage->get($galleryInfoPath) : null;
@@ -75,9 +79,6 @@ class BuildGalleries extends Command
                 $view = view('gallery', ['gallery' => $gallery]);
 
                 $publicFilesystem->put($gallery->getPath() . '.html', $view->toHtml());
-            })
-            ->map(function (Gallery $gallery) {
-                return '/galleries/' . $gallery->getBasename() . '.html';
             });
 
         $indexPageView = view('index', ['galleries' => $galleries]);
