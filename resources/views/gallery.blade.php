@@ -1,18 +1,13 @@
-<!doctype html>
-<html lang="de">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('app')
 
-    <title>{{ $galleryInfo->name }}</title>
-</head>
-<body>
+@section('title', $galleryInfo->name)
 
-@foreach ($files as $file)
-    <div>
-        <img src="/{{ $file }}"/>
-    </div>
-@endforeach
-
-</body>
-</html>
+@section('content')
+    @foreach ($files as $file)
+        <div>
+            <a data-fslightbox href="/{{ $file }}">
+                <img src="/{{ $file }}"/>
+            </a>
+        </div>
+    @endforeach
+@endsection

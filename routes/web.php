@@ -11,9 +11,12 @@
 |
 */
 
-use Illuminate\Support\Collection;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
+use Illuminate\Support\Facades\Artisan;
+use Laravel\Lumen\Routing\Router;
+
+/**
+ * @var Router $router
+ */
 
 $router->get('/', function () use ($router) {
     return $router->app->version();

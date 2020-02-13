@@ -57,7 +57,6 @@ class BuildGalleries extends Command
                     return !Str::endsWith($file, '.json'); // TODO: only allow images
                 })
                 ->each(function ($file) use ($publicFilesystem) {
-
                     $publicFilesystem->put($file, Storage::disk('local')->get($file));
                 });
 
@@ -70,7 +69,9 @@ class BuildGalleries extends Command
             ), false, 512, JSON_THROW_ON_ERROR);
 
             $parts = explode('/', $galleryDirectoryPath);
-            $view = view('gallery', ['files' => $gallery, 'galleryInfo' => $galleryInfo]);
+            $view = view('gallery', ['files' => $gallery->filter(function ($file) {
+                return !Str::endsWith($file, '.json'); // TODO: only allow images
+            }), 'galleryInfo' => $galleryInfo]);
 
             $htmlFileName = '/galleries/' . $parts[array_key_last($parts)] . '.html';
 

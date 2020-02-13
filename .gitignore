@@ -4,6 +4,7 @@
 /public/galleries
 /storage/app/galleries
 /public/index.html
+/node_modules
 Homestead.json
 Homestead.yaml
 .env
