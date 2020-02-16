@@ -4688,7 +4688,7 @@ body {
   padding: 0;
   background-color: #222222;
   font-size: 20px;
-  color: #dddddd;
+  color: #eeeeee;
 }
 
 div.cover > img {
@@ -4747,7 +4747,7 @@ a.btn {
 a.btn:hover {
   text-decoration: none;
   color: #ffffff;
-  background: #b56ed8;
+  background-color: #b56ed8;
 }
 
 a.btn:focus {

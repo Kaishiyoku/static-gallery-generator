@@ -1,18 +1,19 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,700,700i&display=swap');
-
 @import '~bootstrap-4-grid/scss/grid';
 
 $white: #ffffff;
-$color: #dddddd;
+$color: #eeeeee;
+$bg-color: #222222;
 $link-color: #b56ed8;
 $font-size: 20px;
+$center-cover-text: false;
 
 html,
 body {
     font-family: 'Nunito', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #222222;
+    background-color: $bg-color;
     font-size: $font-size;
     color: $color;
 }
@@ -26,13 +27,16 @@ div.cover {
         width: 100%;
         text-align: center;
         position: absolute;
-        //top: 50%;
-        //left: 50%;
-        //transform: translate(-50%, -50%);
         padding: 5pt 10pt;
         font-size: 2rem;
-        color: #eeeeee;
+        color: $color;
         background-color: rgba(0, 0, 0, .5);
+
+        @if ($center-cover-text) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
 }
 
@@ -76,8 +80,7 @@ a {
         &:hover {
             text-decoration: none;
             color: $white;
-            //background-color: $link-color;
-            background: #b56ed8;
+            background-color: $link-color;
         }
 
         &:focus {
