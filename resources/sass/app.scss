@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,700,700i&display=swap');
 
-@import '~bootstrap/scss/bootstrap-grid';
+@import '~bootstrap-4-grid/scss/grid';
 
-$g-white: #ffffff;
-$g-color: #dddddd;
-$g-link-color: #b56ed8;
-$g-font-size: 20px;
+$white: #ffffff;
+$color: #dddddd;
+$link-color: #b56ed8;
+$font-size: 20px;
 
 html,
 body {
@@ -13,8 +13,8 @@ body {
     margin: 0;
     padding: 0;
     background-color: #222222;
-    font-size: $g-font-size;
-    color: $g-color;
+    font-size: $font-size;
+    color: $color;
 }
 
 div.cover {
@@ -55,7 +55,7 @@ div.gallery {
 }
 
 a {
-    color: $g-link-color;
+    color: $link-color;
     text-decoration: none;
 
     &:hover {
@@ -69,28 +69,24 @@ a {
         padding-top: .25rem;
         padding-bottom: .25rem;
         display: inline-block;
-        border: 1px solid rgba($g-link-color, .15);
+        border: 1px solid rgba($link-color, .15);
         border-radius: .15rem;
         transition: all .1s ease-in;
 
         &:hover {
             text-decoration: none;
-            color: $g-white;
-            background-color: $g-link-color;
+            color: $white;
+            //background-color: $link-color;
+            background: #b56ed8;
         }
 
         &:focus {
-            color: $g-white;
-            background-color: lighten($g-link-color, 10%);
+            color: $white;
+            background-color: lighten($link-color, 10%);
         }
     }
 
     &.btn-block {
         width: 100%;
     }
-}
-
-.blocktext {
-    text-align: justify;
-    hyphens: auto;
 }

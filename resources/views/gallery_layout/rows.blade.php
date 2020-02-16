@@ -7,7 +7,7 @@
                         <img src="/{{ $image->getPath() }}" alt="{{ $image->getBasename() }}" data-provide="zoomable"/>
 
                         @if (getImageDescriptionFor($gallery, $image))
-                            <div class="blocktext">
+                            <div class="text-justify">
                                 {!! getImageDescriptionFor($gallery, $image) !!}
                             </div>
                         @endif

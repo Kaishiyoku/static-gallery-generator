@@ -39,6 +39,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "bootstrap-4-grid": "^3.3.0",
         "medium-zoom": "^1.0.5"
     }
 }
