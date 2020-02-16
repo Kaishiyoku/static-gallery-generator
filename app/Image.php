@@ -2,6 +2,9 @@
 
 namespace App;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+
 class Image
 {
     /**
@@ -111,5 +114,28 @@ class Image
     public function getFilename(): string
     {
         return $this->filename;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBasenameWithSlug(): string
+    {
+        return Str::slug($this->getBasename());
+    }
+
+    /**
+     * @return string
+     */
+    public function getPathWithSlug(): string
+    {
+        $directories = explode('/', $this->getDirname());
+
+        $subDirname = Arr::last($directories);
+        $otherDirname = implode('/', Arr::except($directories, count($directories) - 1));
+
+        $fullDirname = $otherDirname . '/' . Str::slug($subDirname);
+
+        return $fullDirname . '/' . Str::slug($this->getFilename()) . '.' . $this->getExtension();
     }
 }

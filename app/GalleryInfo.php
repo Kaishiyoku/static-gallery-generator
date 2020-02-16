@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class GalleryInfo
 {

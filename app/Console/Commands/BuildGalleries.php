@@ -66,19 +66,19 @@ class BuildGalleries extends Command
                     });
 
                 $images->each(function (Image $image) use ($localStorage, $publicFilesystem) {
-                    $publicFilesystem->put($image->getPath(), $localStorage->get($image->getPath()));
+                    $publicFilesystem->put($image->getPathWithSlug(), $localStorage->get($image->getPath()));
                 });
 
                 $galleryInfoPath = $data['path'] . '/info.json';
 
                 $galleryInfoJsonStr = $localStorage->exists($galleryInfoPath) ? $localStorage->get($galleryInfoPath) : null;
 
-                return new Gallery($data['basename'], $data['path'], $images, $galleryInfoJsonStr);
+                return new Gallery($data['basename'], $data['dirname'], $data['path'], $images, $galleryInfoJsonStr);
             })
             ->each(function (Gallery $gallery) use ($publicFilesystem) {
                 $view = view('gallery', ['gallery' => $gallery]);
 
-                $publicFilesystem->put($gallery->getPath() . '.html', $view->toHtml());
+                $publicFilesystem->put($gallery->getPathWithSlug() . '.html', $view->toHtml());
             });
 
         $indexPageView = view('index', ['galleries' => $galleries]);

@@ -10,7 +10,7 @@
                     <ul class="list-style-none">
                         @foreach ($chunk as $gallery)
                             <li>
-                                <a href="{{ $gallery->getPath() }}.html" class="lg btn btn-block">
+                                <a href="{{ $gallery->getPathWithSlug() }}.html" class="lg btn btn-block">
                                     {{ $gallery->getGalleryInfo()->getName() ?? $gallery->getBaseName() }}
                                 </a>
                             </li>

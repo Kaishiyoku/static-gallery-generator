@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class Gallery
 {
@@ -10,6 +11,11 @@ class Gallery
      * @var string
      */
     private $basename;
+
+    /**
+     * @var string
+     */
+    private $dirname;
 
     /**
      * @var string
@@ -28,13 +34,15 @@ class Gallery
 
     /**
      * @param string $basename
+     * @param string $dirname
      * @param string $path
      * @param Collection $images
      * @param string|null $galleryInfoJsonStr
      */
-    public function __construct(string $basename, string $path, Collection $images, string $galleryInfoJsonStr = null)
+    public function __construct(string $basename, string $dirname, string $path, Collection $images, string $galleryInfoJsonStr = null)
     {
         $this->basename = $basename;
+        $this->dirname = $dirname;
         $this->path = $path;
         $this->images = $images;
         $this->galleryInfo = GalleryInfo::fromJsonStr($galleryInfoJsonStr);
@@ -46,6 +54,14 @@ class Gallery
     public function getBasename(): string
     {
         return $this->basename;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDirname(): string
+    {
+        return $this->dirname;
     }
 
     /**
@@ -70,5 +86,13 @@ class Gallery
     public function getGalleryInfo(): ?GalleryInfo
     {
         return $this->galleryInfo;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPathWithSlug(): string
+    {
+        return $this->getDirname() . '/' . Str::slug($this->getBasename());
     }
 }

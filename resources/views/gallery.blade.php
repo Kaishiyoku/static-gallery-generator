@@ -8,7 +8,7 @@
             <div class="cover-text">{{ $gallery->getGalleryInfo()->getName() }}</div>
         @endif
 
-        <img src="/{{ $gallery->getImages()->first()->getPath() }}" alt="{{ $gallery->getImages()->first()->getBasename() }}"/>
+        <img src="/{{ $gallery->getImages()->first()->getPathWithSlug() }}" alt="{{ $gallery->getImages()->first()->getBasenameWithSlug() }}"/>
 
         @if (getImageDescriptionFor($gallery, $gallery->getImages()->first()))
             <div class="container blocktext pb-4">
