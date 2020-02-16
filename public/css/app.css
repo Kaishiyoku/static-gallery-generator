@@ -4331,7 +4331,7 @@ body {
   padding: 0;
   background-color: #222222;
   font-size: 20px;
-  color: #eeeeee;
+  color: #dddddd;
 }
 
 div.cover > img {
@@ -4400,5 +4400,12 @@ a.btn:focus {
 
 a.btn-block {
   width: 100%;
+}
+
+.blocktext {
+  text-align: justify;
+  -webkit-hyphens: auto;
+      -ms-hyphens: auto;
+          hyphens: auto;
 }
 

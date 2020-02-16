@@ -3,7 +3,7 @@
 @import '~bootstrap/scss/bootstrap-grid';
 
 $g-white: #ffffff;
-$g-color: #eeeeee;
+$g-color: #dddddd;
 $g-link-color: #b56ed8;
 $g-font-size: 20px;
 
@@ -88,4 +88,9 @@ a {
     &.btn-block {
         width: 100%;
     }
+}
+
+.blocktext {
+    text-align: justify;
+    hyphens: auto;
 }

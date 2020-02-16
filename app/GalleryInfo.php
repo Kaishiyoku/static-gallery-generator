@@ -2,12 +2,20 @@
 
 namespace App;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+
 class GalleryInfo
 {
     /**
      * @var string
      */
     private $name;
+
+    /**
+     * @var Collection<string>
+     */
+    private $imageDescriptions;
 
     /**
      * @param string|null $str
@@ -23,6 +31,10 @@ class GalleryInfo
 
         $galleryInfo = new GalleryInfo();
         $galleryInfo->name = $jsonData['name'];
+        $galleryInfo->imageDescriptions = collect(Arr::get($jsonData, 'imageDescriptions'))
+            ->map(function ($imageDescription) {
+                return parseMarkdown($imageDescription);
+            });
 
         return $galleryInfo;
     }
@@ -33,5 +45,13 @@ class GalleryInfo
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<string>
+     */
+    public function getImageDescriptions(): Collection
+    {
+        return $this->imageDescriptions;
     }
 }
