@@ -13,6 +13,11 @@ class GalleryInfo
     private $name;
 
     /**
+     * @var string
+     */
+    private $layout;
+
+    /**
      * @var Collection<string>
      */
     private $imageDescriptions;
@@ -30,7 +35,8 @@ class GalleryInfo
         $jsonData = json_decode($str, true, 512, JSON_THROW_ON_ERROR);
 
         $galleryInfo = new GalleryInfo();
-        $galleryInfo->name = $jsonData['name'];
+        $galleryInfo->name = Arr::get($jsonData, 'name');
+        $galleryInfo->layout = Arr::get($jsonData, 'layout', 'default');
         $galleryInfo->imageDescriptions = collect(Arr::get($jsonData, 'imageDescriptions'))
             ->map(function ($imageDescription) {
                 return parseMarkdown($imageDescription);
@@ -45,6 +51,14 @@ class GalleryInfo
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLayout(): string
+    {
+        return $this->layout;
     }
 
     /**
