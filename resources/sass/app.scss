@@ -1,7 +1,11 @@
-@import '~bootstrap/scss/bootstrap-grid';
-@import '~lightgallery/src/sass/lightgallery';
-
 @import url('https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,700,700i&display=swap');
+
+@import '~bootstrap/scss/bootstrap-grid';
+
+$g-white: #ffffff;
+$g-color: #eeeeee;
+$g-link-color: #b56ed8;
+$g-font-size: 20px;
 
 html,
 body {
@@ -9,6 +13,8 @@ body {
     margin: 0;
     padding: 0;
     background-color: #222222;
+    font-size: $g-font-size;
+    color: $g-color;
 }
 
 div.cover {
@@ -24,7 +30,7 @@ div.cover {
         //left: 50%;
         //transform: translate(-50%, -50%);
         padding: 5pt 10pt;
-        font-size: 30pt;
+        font-size: 2rem;
         color: #eeeeee;
         background-color: rgba(0, 0, 0, .5);
     }
@@ -33,23 +39,8 @@ div.cover {
 div.gallery {
     text-align: center;
 
-    > a {
-        > img {
-            max-width: 100%;
-        }
-    }
-}
-
-a {
-    color: #00aced;
-    text-decoration: none;
-
-    &.lg {
-        font-size: 15pt;
-    }
-
-    &:hover {
-        text-decoration: underline;
+    img {
+        max-width: 100%;
     }
 }
 
@@ -57,4 +48,44 @@ a {
     margin: 0;
     padding: 0;
     list-style-type: none;
+}
+
+.lg {
+    font-size: 15pt;
+}
+
+a {
+    color: $g-link-color;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    &.btn {
+        margin-bottom: .5rem;
+        padding-left: .5rem;
+        padding-right: .5rem;
+        padding-top: .25rem;
+        padding-bottom: .25rem;
+        display: inline-block;
+        border: 1px solid rgba($g-link-color, .15);
+        border-radius: .15rem;
+        transition: all .1s ease-in;
+
+        &:hover {
+            text-decoration: none;
+            color: $g-white;
+            background-color: $g-link-color;
+        }
+
+        &:focus {
+            color: $g-white;
+            background-color: lighten($g-link-color, 10%);
+        }
+    }
+
+    &.btn-block {
+        width: 100%;
+    }
 }
