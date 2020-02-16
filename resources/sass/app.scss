@@ -93,3 +93,25 @@ a {
         width: 100%;
     }
 }
+
+@media screen and (min-width: map-get($grid-breakpoints, 'lg')) {
+    .flex {
+        display: flex;
+        flex-direction: row;
+
+        img {
+            max-width: 45% !important;
+        }
+
+        > * {
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+        }
+    }
+
+    .flex-reverse {
+        @extend .flex;
+
+        flex-direction: row-reverse;
+    }
+}

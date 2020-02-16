@@ -4759,3 +4759,26 @@ a.btn-block {
   width: 100%;
 }
 
+@media screen and (min-width: 992px) {
+  .flex,
+  .flex-reverse {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .flex img,
+  .flex-reverse img {
+    max-width: 45% !important;
+  }
+
+  .flex > *,
+  .flex-reverse > * {
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .flex-reverse {
+    flex-direction: row-reverse;
+  }
+}
+
