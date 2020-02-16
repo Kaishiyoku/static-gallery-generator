@@ -2,11 +2,13 @@
 @import '~bootstrap-4-grid/scss/grid';
 
 $white: #ffffff;
+$black: #000000;
 $color: #eeeeee;
 $bg-color: #222222;
 $link-color: #b56ed8;
 $font-size: 20px;
 $center-cover-text: false;
+$border-radius: .2rem;;
 
 html,
 body {
@@ -74,8 +76,8 @@ a {
         padding-bottom: .25rem;
         display: inline-block;
         border: 1px solid rgba($link-color, .15);
-        border-radius: .15rem;
-        transition: all .1s ease-in;
+        border-radius: $border-radius;
+        transition: all .15s linear;
 
         &:hover {
             text-decoration: none;
@@ -113,5 +115,42 @@ a {
         @extend .flex;
 
         flex-direction: row-reverse;
+    }
+}
+
+.gallery-list {
+    div.gallery-item {
+        background-size: 100%;
+        background-position: center;
+        overflow: hidden;
+        height: 7.5rem;
+        margin-bottom: .75rem;
+        border-radius: $border-radius;
+
+        a {
+            color: $white;
+            padding: 0;
+            height: inherit;
+            border: none;
+
+            &:hover {
+                background-color: rgba(lighten($link-color, 10%), .5);
+            }
+
+            &:focus {
+                background-color: rgba(lighten($link-color, 10%), .6);
+            }
+        }
+
+        div.title {
+            width: 101%;
+            padding-left: .5rem;
+            padding-right: .5rem;
+            padding-top: .25rem;
+            padding-bottom: .25rem;
+            margin-top: -1px;
+            margin-left: -1px;
+            text-shadow: 2px 2px 2px rgba($black, .5);
+        }
     }
 }

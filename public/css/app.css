@@ -4740,8 +4740,8 @@ a.btn {
   padding-bottom: 0.25rem;
   display: inline-block;
   border: 1px solid rgba(181, 110, 216, 0.15);
-  border-radius: 0.15rem;
-  transition: all 0.1s ease-in;
+  border-radius: 0.2rem;
+  transition: all 0.15s linear;
 }
 
 a.btn:hover {
@@ -4780,5 +4780,40 @@ a.btn-block {
   .flex-reverse {
     flex-direction: row-reverse;
   }
+}
+
+.gallery-list div.gallery-item {
+  background-size: 100%;
+  background-position: center;
+  overflow: hidden;
+  height: 7.5rem;
+  margin-bottom: 0.75rem;
+  border-radius: 0.2rem;
+}
+
+.gallery-list div.gallery-item a {
+  color: #ffffff;
+  padding: 0;
+  height: inherit;
+  border: none;
+}
+
+.gallery-list div.gallery-item a:hover {
+  background-color: rgba(202, 150, 227, 0.5);
+}
+
+.gallery-list div.gallery-item a:focus {
+  background-color: rgba(202, 150, 227, 0.6);
+}
+
+.gallery-list div.gallery-item div.title {
+  width: 101%;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  margin-top: -1px;
+  margin-left: -1px;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
