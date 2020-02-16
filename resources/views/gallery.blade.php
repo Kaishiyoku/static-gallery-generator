@@ -1,11 +1,11 @@
 @extends('app')
 
-@section('title', optional($gallery->getGalleryInfo())->getName())
+@section('title', $gallery->getGalleryInfo()->getName())
 
 @section('content')
     <div class="cover">
-        @if (!empty(optional($gallery->getGalleryInfo())->getName()))
-            <div class="cover-text">{{ optional($gallery->getGalleryInfo())->getName() }}</div>
+        @if (!empty($gallery->getGalleryInfo()->getName()))
+            <div class="cover-text">{{ $gallery->getGalleryInfo()->getName() }}</div>
         @endif
 
         <img src="/{{ $gallery->getImages()->first()->getPath() }}" alt="{{ $gallery->getImages()->first()->getBasename() }}"/>
@@ -17,5 +17,5 @@
         @endif
     </div>
 
-    @include('gallery_layout.' . (optional($gallery->getGalleryInfo())->getLayout() ?? 'default'), ['gallery' => $gallery, 'images' => $gallery->getImages()->skip(1)])
+    @include('gallery_layout.' . $gallery->getGalleryInfo()->getLayout(), ['gallery' => $gallery, 'images' => $gallery->getImages()->skip(1)])
 @endsection

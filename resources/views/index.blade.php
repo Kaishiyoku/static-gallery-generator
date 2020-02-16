@@ -11,7 +11,7 @@
                         @foreach ($chunk as $gallery)
                             <li>
                                 <a href="{{ $gallery->getPath() }}.html" class="lg btn btn-block">
-                                    {{ optional($gallery->getGalleryInfo())->getName() ?? $gallery->getBaseName() }}
+                                    {{ $gallery->getGalleryInfo()->getName() ?? $gallery->getBaseName() }}
                                 </a>
                             </li>
                         @endforeach

@@ -2,7 +2,8 @@
 /.idea
 /storage/logs
 /public/galleries
-/storage/app/galleries
+/storage/app/galleries/*
+!/storage/app/galleries/sample_gallery/
 /public/index.html
 /node_modules
 Homestead.json

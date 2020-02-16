@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 class GalleryInfo
 {
     /**
-     * @var string
+     * @var string@null
      */
     private $name;
 
@@ -26,13 +26,9 @@ class GalleryInfo
      * @param string|null $str
      * @return GalleryInfo|null
      */
-    public static function fromJsonStr(string $str = null): ?GalleryInfo
+    public static function fromJsonStr(?string $str): ?GalleryInfo
     {
-        if (!$str) {
-            return null;
-        }
-
-        $jsonData = json_decode($str, true, 512, JSON_THROW_ON_ERROR);
+        $jsonData = $str ? json_decode($str, true, 512, JSON_THROW_ON_ERROR) : [];
 
         $galleryInfo = new GalleryInfo();
         $galleryInfo->name = Arr::get($jsonData, 'name');
@@ -46,9 +42,9 @@ class GalleryInfo
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
