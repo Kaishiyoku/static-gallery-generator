@@ -2,7 +2,6 @@
 
 use App\Gallery;
 use App\Image;
-use App\Libraries\Markdown\LaboratoryMeasurementExtension;
 use Intervention\Image\ImageManager;
 use League\CommonMark\Converter;
 use League\CommonMark\DocParser;
@@ -13,14 +12,24 @@ use voku\helper\HtmlMin;
 use Webuni\CommonMark\AttributesExtension\AttributesExtension;
 
 if (!function_exists('publicPath')) {
-    function publicPath($path = null)
+    /**
+     * Get the public path or a subfolder of it
+     *
+     * @param string|null $path
+     * @return string
+     */
+    function publicPath(?string $path = null): string
     {
         return rtrim(app()->basePath('public/' . $path), '/');
     }
 }
 
 if (!function_exists('minifyHtml')) {
-    function minifyHtml($html)
+    /**
+     * @param string $html
+     * @return string
+     */
+    function minifyHtml(string $html): string
     {
         $htmlMin = new HtmlMin();
 
@@ -29,7 +38,14 @@ if (!function_exists('minifyHtml')) {
 }
 
 if (!function_exists('getImageDescriptionFor')) {
-    function getImageDescriptionFor(Gallery $gallery, Image $image)
+    /**
+     * Get the description of a given image if there is one
+     *
+     * @param Gallery $gallery
+     * @param Image $image
+     * @return string|null
+     */
+    function getImageDescriptionFor(Gallery $gallery, Image $image): ?string
     {
         $hasImageDescription = $gallery->getGalleryInfo() && $gallery->getGalleryInfo()->getImageDescriptions()->get($image->getBasename());
 
@@ -42,6 +58,10 @@ if (!function_exists('getImageDescriptionFor')) {
 }
 
 if (!function_exists('parseMarkdown')) {
+    /**
+     * @param string $text
+     * @return string
+     */
     function parseMarkdown(string $text): string
     {
         $environment = Environment::createCommonMarkEnvironment();
@@ -55,6 +75,9 @@ if (!function_exists('parseMarkdown')) {
 }
 
 if (!function_exists('getImageManager')) {
+    /**
+     * @return ImageManager
+     */
     function getImageManager(): ImageManager
     {
          return new ImageManager();
