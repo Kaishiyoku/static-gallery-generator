@@ -3,6 +3,7 @@
 use App\Gallery;
 use App\Image;
 use App\Libraries\Markdown\LaboratoryMeasurementExtension;
+use Intervention\Image\ImageManager;
 use League\CommonMark\Converter;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
@@ -50,5 +51,12 @@ if (!function_exists('parseMarkdown')) {
         $converter = new Converter(new DocParser($environment), new HtmlRenderer($environment));
 
         return $converter->convertToHtml($text);
+    }
+}
+
+if (!function_exists('getImageManager')) {
+    function getImageManager(): ImageManager
+    {
+         return new ImageManager();
     }
 }

@@ -2,7 +2,7 @@
     <div class="gallery">
         @foreach ($gallery->getImages()->skip(1) as $i => $image)
             <div class="{{ $i % 2 === 0 ? 'flex' : 'flex-reverse' }}">
-                <img src="/{{ $image->getPathWithSlug() }}" alt="{{ $image->getBasenameWithSlug() }}" data-provide="zoomable"/>
+                @include('_image', ['image' => $image])
 
                 @if (getImageDescriptionFor($gallery, $image))
                     <div class="text-justify">

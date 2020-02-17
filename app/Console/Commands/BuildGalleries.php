@@ -7,6 +7,8 @@ use App\Image;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Constraint;
+use Intervention\Image\ImageManager;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 
@@ -66,6 +68,18 @@ class BuildGalleries extends Command
                     });
 
                 $images->each(function (Image $image) use ($localStorage, $publicFilesystem) {
+                    $imageManager = getImageManager();
+
+                    $this->line('Resizing image "' . $image->getPathWithSlug() . '"');
+
+                    $resizedImage = $imageManager->make($localStorage->get($image->getPath()))->resize(1500, null, function (Constraint $constraint) {
+                        $constraint->aspectRatio();
+                        $constraint->upsize();
+                    });
+
+                    $resizedImageResponse = $resizedImage->psrResponse();
+
+                    $publicFilesystem->put($image->getPathWithSlug('-thumbnail'), $resizedImageResponse->getBody()->getContents());
                     $publicFilesystem->put($image->getPathWithSlug(), $localStorage->get($image->getPath()));
                 });
 

@@ -4,7 +4,7 @@
             @foreach ($images->chunk(floor($images->count() / 2)) as $chunk)
                 <div class="col-lg-6">
                     @foreach ($chunk as $image)
-                        <img src="/{{ $image->getPathWithSlug() }}" alt="{{ $image->getBasenameWithSlug() }}" data-provide="zoomable"/>
+                        @include('_image', ['image' => $image])
 
                         @if (getImageDescriptionFor($gallery, $image))
                             <div class="text-justify">

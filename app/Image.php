@@ -125,9 +125,10 @@ class Image
     }
 
     /**
+     * @param string|null $suffix
      * @return string
      */
-    public function getPathWithSlug(): string
+    public function getPathWithSlug(?string $suffix = null): string
     {
         $directories = explode('/', $this->getDirname());
 
@@ -136,6 +137,6 @@ class Image
 
         $fullDirname = $otherDirname . '/' . Str::slug($subDirname);
 
-        return $fullDirname . '/' . Str::slug($this->getFilename()) . '.' . $this->getExtension();
+        return $fullDirname . '/' . Str::slug($this->getFilename()) . $suffix . '.' . $this->getExtension();
     }
 }

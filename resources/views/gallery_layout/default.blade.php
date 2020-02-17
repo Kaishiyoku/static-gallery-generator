@@ -1,7 +1,7 @@
 <div class="container">
     <div class="gallery">
         @foreach ($gallery->getImages()->skip(1) as $image)
-            <img src="/{{ $image->getPathWithSlug() }}" alt="{{ $image->getBasenameWithSlug() }}" data-provide="zoomable"/>
+            @include('_image', ['image' => $image])
 
             @if (getImageDescriptionFor($gallery, $image))
                 <div class="text-justify">

@@ -1,7 +1,3 @@
-window.$ = window.jQuery = require('jquery');
-
-require('lightgallery/src/js/lightgallery');
-
 import mediumZoom from 'medium-zoom'
 
 mediumZoom('[data-provide="zoomable"]', {
