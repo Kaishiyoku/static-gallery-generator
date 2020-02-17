@@ -17,11 +17,15 @@ use Psr\Http\Message\ResponseInterface;
 class BuildGalleries extends Command
 {
     /**
+     * The maximum width in pixels image thumbnails should have
+     *
      * @var int
      */
     private const MAX_RESIZE_WIDTH = 1500;
 
     /**
+     * Suffix of the thumbnail filenames
+     *
      * @var string
      */
     public const THUMBNAIL_SUFFIX = '-thumbnail';
@@ -74,6 +78,8 @@ class BuildGalleries extends Command
     }
 
     /**
+     * Filter for directories only
+     *
      * @return Closure
      */
     private function filterByDir(): Closure
@@ -84,6 +90,8 @@ class BuildGalleries extends Command
     }
 
     /**
+     * Map found "galleries", directories with images and store the images and generated HTML in the public folder
+     *
      * @return Closure
      */
     private function mapGalleries(): Closure
@@ -111,6 +119,8 @@ class BuildGalleries extends Command
     }
 
     /**
+     * Resize a image to a given maximum width; respects aspect ratio
+     *
      * @param Image $image
      * @return ResponseInterface
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -131,6 +141,8 @@ class BuildGalleries extends Command
     }
 
     /**
+     * Get the images from a gallery folder
+     *
      * @param array $galleryData
      * @return Collection<Image>
      */
@@ -153,6 +165,8 @@ class BuildGalleries extends Command
     }
 
     /**
+     * Generate and store the HTML to the public folder
+     *
      * @return Closure
      */
     private function storeHtml(): Closure
