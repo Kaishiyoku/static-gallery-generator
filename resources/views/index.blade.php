@@ -9,7 +9,7 @@
                 <div class="col-lg-6">
                     @foreach ($chunk as $gallery)
                         <div style="background-image: url('/{{ $gallery->getImages()->first()->getPathWithSlug() }}');" class="gallery-item">
-                            <a href="{{ $gallery->getPathWithSlug() }}.html" class="lg btn btn-block">
+                            <a href="{{ $gallery->getPathWithSlug(\App\Console\Commands\BuildGalleries::THUMBNAIL_SUFFIX) }}.html" class="lg btn btn-block">
                                 <div class="title">{{ $gallery->getGalleryInfo()->getName() ?? $gallery->getBaseName() }}</div>
                             </a>
                         </div>
