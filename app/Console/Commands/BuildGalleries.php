@@ -28,7 +28,17 @@ class BuildGalleries extends Command
      *
      * @var int
      */
-    private const MAX_RESIZE_WIDTH = 2000;
+    private const MAX_IMAGE_RESIZE_WIDTH = 2000;
+
+    /**
+     * @var int
+     */
+    private const THUMBNAIL_QUALITY = 50;
+
+    /**
+     * @var int
+     */
+    private const IMAGE_QUALITY = 85;
 
     /**
      * Suffix of the thumbnail filenames
@@ -110,9 +120,17 @@ class BuildGalleries extends Command
         return function ($galleryData) use ($localStorage, $publicFilesystem) {
             $images = $this->getImagesForGallery($galleryData);
 
-            $images->each(function (Image $image) use ($localStorage, $publicFilesystem) {
-                $resizedThumbnailImageResponse = $this->resizeImage($image->getPath(), self::MAX_THUMBNAIL_RESIZE_WIDTH);
-                $resizedImageResponse = $this->resizeImage($image->getPath(), self::MAX_RESIZE_WIDTH);
+            $images->each(function (Image $image) use ($publicFilesystem) {
+                $resizedThumbnailImageResponse = $this->resizeImage(
+                    $image->getPath(),
+                    self::MAX_THUMBNAIL_RESIZE_WIDTH,
+                    self::THUMBNAIL_QUALITY
+                );
+                $resizedImageResponse = $this->resizeImage(
+                    $image->getPath(),
+                    self::MAX_IMAGE_RESIZE_WIDTH,
+                    self::IMAGE_QUALITY
+                );
 
                 $publicFilesystem->put($image->getPathWithSlug(self::THUMBNAIL_SUFFIX), $resizedThumbnailImageResponse->getBody()->getContents());
                 $publicFilesystem->put($image->getPathWithSlug(), $resizedImageResponse->getBody()->getContents());
@@ -131,10 +149,11 @@ class BuildGalleries extends Command
      *
      * @param string $path
      * @param int $maxResizeWidth
+     * @param int $quality
      * @return ResponseInterface
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    private function resizeImage(string $path, int $maxResizeWidth): ResponseInterface
+    private function resizeImage(string $path, int $maxResizeWidth, int $quality = 90): ResponseInterface
     {
         $this->line("Resizing image \"{$path}\"");
 
@@ -146,7 +165,7 @@ class BuildGalleries extends Command
             $constraint->upsize();
         });
 
-        return $resizedImage->psrResponse();
+        return $resizedImage->psrResponse('jpg', $quality);
     }
 
     /**
