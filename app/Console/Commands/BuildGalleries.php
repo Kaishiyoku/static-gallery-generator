@@ -21,7 +21,14 @@ class BuildGalleries extends Command
      *
      * @var int
      */
-    private const MAX_RESIZE_WIDTH = 1500;
+    private const MAX_THUMBNAIL_RESIZE_WIDTH = 1500;
+
+    /**
+     * The maximum width in pixels images should have
+     *
+     * @var int
+     */
+    private const MAX_RESIZE_WIDTH = 2000;
 
     /**
      * Suffix of the thumbnail filenames
@@ -104,10 +111,11 @@ class BuildGalleries extends Command
             $images = $this->getImagesForGallery($galleryData);
 
             $images->each(function (Image $image) use ($localStorage, $publicFilesystem) {
-                $resizedImageResponse = $this->resizeImage($image);
+                $resizedThumbnailImageResponse = $this->resizeImage($image->getPath(), self::MAX_THUMBNAIL_RESIZE_WIDTH);
+                $resizedImageResponse = $this->resizeImage($image->getPath(), self::MAX_RESIZE_WIDTH);
 
-                $publicFilesystem->put($image->getPathWithSlug(self::THUMBNAIL_SUFFIX), $resizedImageResponse->getBody()->getContents());
-                $publicFilesystem->put($image->getPathWithSlug(), $localStorage->get($image->getPath()));
+                $publicFilesystem->put($image->getPathWithSlug(self::THUMBNAIL_SUFFIX), $resizedThumbnailImageResponse->getBody()->getContents());
+                $publicFilesystem->put($image->getPathWithSlug(), $resizedImageResponse->getBody()->getContents());
             });
 
             $galleryInfoPath = $galleryData['path'] . '/info.json';
@@ -121,18 +129,19 @@ class BuildGalleries extends Command
     /**
      * Resize a image to a given maximum width; respects aspect ratio
      *
-     * @param Image $image
+     * @param string $path
+     * @param int $maxResizeWidth
      * @return ResponseInterface
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    private function resizeImage(Image $image): ResponseInterface
+    private function resizeImage(string $path, int $maxResizeWidth): ResponseInterface
     {
-        $this->line('Resizing image "' . $image->getPathWithSlug() . '"');
+        $this->line("Resizing image \"{$path}\"");
 
         $localStorage = Storage::disk('local');
         $imageManager = getImageManager();
 
-        $resizedImage = $imageManager->make($localStorage->get($image->getPath()))->resize(self::MAX_RESIZE_WIDTH, null, function (Constraint $constraint) {
+        $resizedImage = $imageManager->make($localStorage->get($path))->resize($maxResizeWidth, null, function (Constraint $constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
         });
