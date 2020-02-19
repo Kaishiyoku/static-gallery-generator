@@ -1,6 +1,7 @@
 /vendor
 /.idea
 /storage/logs
+/storage/framework/views
 /public/galleries
 /storage/app/galleries/*
 !/storage/app/galleries/sample_gallery/
