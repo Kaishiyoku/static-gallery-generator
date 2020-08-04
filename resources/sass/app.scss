@@ -1,24 +1,30 @@
-@import url('https://fonts.googleapis.com/css?family=Nunito:300,300i,400,400i,700,700i&display=swap');
 @import '~bootstrap-4-grid/scss/grid';
 
 $white: #ffffff;
 $black: #000000;
-$color: #eeeeee;
+$body-color: #eeeeee;
+$cover-text-color: #eeeeee;
 $bg-color: #222222;
 $link-color: #b56ed8;
 $card-link-color: #fff;
-$font-size: 20px;
+$base-font-size: 20px;
+$base-line-height: 1.55rem;
 $center-cover-text: false;
 $border-radius: .2rem;;
 
+::selection {
+    background-color: desaturate(lighten($link-color, 5%), 35%);
+}
+
 html,
 body {
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Merriweather', serif;
     margin: 0;
     padding: 0;
     background-color: $bg-color;
-    font-size: $font-size;
-    color: $color;
+    font-size: $base-font-size;
+    line-height: $base-line-height;
+    color: $body-color;
 }
 
 div.cover {
@@ -27,18 +33,32 @@ div.cover {
     }
 
     > div.cover-text {
-        width: 100%;
-        text-align: center;
         position: absolute;
-        padding: 5pt 10pt;
-        font-size: 2rem;
-        color: $color;
-        background-color: rgba(0, 0, 0, .5);
+        padding: 1rem 2rem;
+        color: $cover-text-color;
+        background-color: rgba(0, 0, 0, .25);
+        text-shadow: 4px 4px 2px rgba(125, 125, 125, 1);
 
         @if ($center-cover-text) {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+        }
+
+        @include media-breakpoint-only(xl) {
+            font-size: 5rem;
+        }
+
+        @include media-breakpoint-only(lg) {
+            font-size: 3rem;
+        }
+
+        @include media-breakpoint-only(md) {
+            font-size: 2rem;
+        }
+
+        @include media-breakpoint-only(sm) {
+            font-size: 1.5rem;
         }
     }
 }
@@ -55,10 +75,6 @@ div.gallery {
     margin: 0;
     padding: 0;
     list-style-type: none;
-}
-
-.lg {
-    font-size: 15pt;
 }
 
 a {
@@ -97,12 +113,13 @@ a {
     }
 }
 
-@media screen and (min-width: map-get($grid-breakpoints, 'lg')) {
+@include media-breakpoint-up(lg) {
     .flex {
         display: flex;
         flex-direction: row;
 
         img {
+            align-self: flex-start;
             max-width: 45% !important;
         }
 
@@ -154,6 +171,41 @@ a {
             margin-top: -1px;
             margin-left: -1px;
             text-shadow: 2px 2px 2px rgba($black, .5);
+        }
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .floating-right {
+        img {
+            padding-left: 1rem;
+            padding-top: .25rem;
+            padding-bottom: 1rem;
+            float: right;
+            width: 45%;
+        }
+    }
+
+    .floating-left {
+        img {
+            padding-right: 1rem;
+            padding-top: .25rem;
+            padding-bottom: 1rem;
+            float: left;
+            width: 45%;
+        }
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .text-prominent {
+        margin-top: -100px;
+        background-color: $bg-color;
+        position: relative;
+        padding-top: 1rem;
+
+        > p:first-child {
+            margin-top: 0;
         }
     }
 }

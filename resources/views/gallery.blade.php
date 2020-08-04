@@ -11,7 +11,7 @@
         <img src="/{{ $gallery->getImages()->first()->getPathWithSlug() }}" alt="{{ $gallery->getImages()->first()->getBasenameWithSlug() }}"/>
 
         @if (getImageDescriptionFor($gallery, $gallery->getImages()->first()))
-            <div class="container blocktext pb-4">
+            <div class="container text-prominent text-justify pb-5">
                 {!! getImageDescriptionFor($gallery, $gallery->getImages()->first()) !!}
             </div>
         @endif

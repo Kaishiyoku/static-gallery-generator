@@ -4,7 +4,7 @@
             @include('_image', ['image' => $image])
 
             @if (getImageDescriptionFor($gallery, $image))
-                <div class="text-justify">
+                <div class="text-justify pb-5">
                     {!! getImageDescriptionFor($gallery, $image) !!}
                 </div>
             @endif
