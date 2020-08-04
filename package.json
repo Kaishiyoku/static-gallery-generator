@@ -27,15 +27,15 @@
     },
     "homepage": "https://github.com/Kaishiyoku/static-gallery-generator#readme",
     "devDependencies": {
-        "bootstrap": "^4.5.0",
+        "bootstrap": "^4.5.1",
         "bootstrap-4-grid": "^3.4.0",
         "cross-env": "^7.0.2",
         "jquery": "^3.5.1",
         "laravel-mix": "^5.0.4",
-        "medium-zoom": "^1.0.5",
+        "medium-zoom": "^1.0.6",
         "resolve-url-loader": "^3.1.1",
-        "sass": "^1.26.8",
-        "sass-loader": "^8.0.2",
+        "sass": "^1.26.10",
+        "sass-loader": "^9.0.2",
         "vue-template-compiler": "^2.6.11"
     }
 }
