@@ -5,7 +5,7 @@
 @section('content')
     <div class="container mt-5 gallery-list">
         <div class="row">
-            @foreach ($galleries->chunk(floor($galleries->count() / 2)) as $chunk)
+            @foreach ($galleries->chunk((int) round($galleries->count() / 2)) as $chunk)
                 <div class="col-lg-6">
                     @foreach ($chunk as $gallery)
                         <div style="background-image: url('/{{ $gallery->getImages()->first()->getPathWithSlug() }}');" class="gallery-item">
