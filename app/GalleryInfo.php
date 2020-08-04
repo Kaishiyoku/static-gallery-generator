@@ -29,7 +29,7 @@ class GalleryInfo
      */
     public static function fromJsonStr(?string $str): ?GalleryInfo
     {
-        $jsonData = $str ? json_decode($str, true, 512, JSON_THROW_ON_ERROR) : [];
+        $jsonData = $str ? json_decode($str, true, 512) : [];
 
         $galleryInfo = new GalleryInfo();
         $galleryInfo->name = Arr::get($jsonData, 'name');
