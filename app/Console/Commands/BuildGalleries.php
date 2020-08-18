@@ -13,6 +13,7 @@ use Intervention\Image\Constraint;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class BuildGalleries extends Command
 {
@@ -62,6 +63,11 @@ class BuildGalleries extends Command
     protected $description = 'Build all galleries';
 
     /**
+     * @var ProgressBar
+     */
+    private $progressBar;
+
+    /**
      * Create a new command instance.
      *
      * @return void
@@ -83,9 +89,22 @@ class BuildGalleries extends Command
         $publicFilesystem = new Filesystem($publicAdapter);
 
         $galleries = collect($localStorage->listContents('/galleries'))
-            ->filter($this->filterByDir())
+            ->filter($this->filterByDir());
+
+        $totalNumberOfImages = $galleries->reduce(function ($accum, $galleryData) {
+            $images = $this->getImagesForGallery($galleryData);
+
+            return $accum + $images->count();
+        }, 0);
+
+        $this->progressBar = $this->output->createProgressBar($totalNumberOfImages);
+
+        $galleries = $galleries
             ->map($this->mapGalleries())
             ->each($this->storeHtml());
+
+        $this->progressBar->finish();
+        $this->line('');
 
         $indexPageView = view('index', ['galleries' => $galleries]);
 
@@ -120,7 +139,7 @@ class BuildGalleries extends Command
         return function ($galleryData) use ($localStorage, $publicFilesystem) {
             $images = $this->getImagesForGallery($galleryData);
 
-            $images->each(function (Image $image) use ($publicFilesystem) {
+            $images->each(function (Image $image) use ($publicFilesystem, $galleryData) {
                 $resizedThumbnailImageResponse = $this->resizeImage(
                     $image->getPath(),
                     self::MAX_THUMBNAIL_RESIZE_WIDTH,
@@ -134,6 +153,9 @@ class BuildGalleries extends Command
 
                 $publicFilesystem->put($image->getPathWithSlug(self::THUMBNAIL_SUFFIX), $resizedThumbnailImageResponse->getBody()->getContents());
                 $publicFilesystem->put($image->getPathWithSlug(), $resizedImageResponse->getBody()->getContents());
+
+                $this->progressBar->advance();
+                $this->output->write(" <info>Processed image for gallery \"{$galleryData['filename']}\": \"{$image->getFilename()}.{$image->getExtension()}\"</info>");
             });
 
             $galleryInfoPath = $galleryData['path'] . '/info.json';
@@ -155,8 +177,6 @@ class BuildGalleries extends Command
      */
     private function resizeImage(string $path, int $maxResizeWidth, int $quality = 90): ResponseInterface
     {
-        $this->line("Resizing image \"{$path}\"");
-
         $localStorage = Storage::disk('local');
         $imageManager = getImageManager();
 
