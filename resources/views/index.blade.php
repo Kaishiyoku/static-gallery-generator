@@ -3,18 +3,16 @@
 @section('title', 'Galleries')
 
 @section('content')
-    <div class="container mt-5 gallery-list">
-        <div class="row">
+    <div class="container mx-auto py-12 px-12 lg:px-4">
+        <div class="lg:grid lg:grid-cols-2 lg:gap-x-6 lg:gap-y-4">
             @foreach ($galleries->chunk((int) round($galleries->count() / 2)) as $chunk)
-                <div class="col-lg-6">
-                    @foreach ($chunk as $gallery)
-                        <div style="background-image: url('/{{ $gallery->getImages()->first()->getPathWithSlug() }}');" class="gallery-item">
-                            <a href="{{ $gallery->getPathWithSlug(\App\Console\Commands\BuildGalleries::THUMBNAIL_SUFFIX) }}.html" class="btn btn-block">
-                                <div class="title">{{ $gallery->getGalleryInfo()->getName() ?? $gallery->getBaseName() }}</div>
-                            </a>
-                        </div>
-                    @endforeach
-                </div>
+                @foreach ($chunk as $gallery)
+                    <div style="background-image: url('/{{ $gallery->getImages()->first()->getPathWithSlug() }}');" class="h-40 rounded bg-full bg-center mb-4 lg:mb-0">
+                        <a href="{{ $gallery->getPathWithSlug(\App\Console\Commands\BuildGalleries::THUMBNAIL_SUFFIX) }}.html" class="rounded block h-full hover:bg-gray-200 py-2 px-3 border-2 border-gray-600 border-opacity-25 hover:border-opacity-50 hover:bg-gray-200 hover:bg-opacity-25 transition-all duration-300">
+                            <div class="text-shadow">{{ $gallery->getGalleryInfo()->getName() ?? $gallery->getBaseName() }}</div>
+                        </a>
+                    </div>
+                @endforeach
             @endforeach
         </div>
     </div>

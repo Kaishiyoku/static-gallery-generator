@@ -3,4 +3,5 @@
     alt="{{ $image->getBasenameWithSlug() }}"
     data-provide="zoomable"
     data-zoom-src="/{{ $image->getPathWithSlug() }}"
+    class="m-w-full"
 />

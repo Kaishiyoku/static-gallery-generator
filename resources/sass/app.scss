@@ -16,60 +16,60 @@ $border-radius: .2rem;;
     background-color: desaturate(lighten($link-color, 5%), 35%);
 }
 
-html,
-body {
-    font-family: 'Merriweather', serif;
-    margin: 0;
-    padding: 0;
-    background-color: $bg-color;
-    font-size: $base-font-size;
-    line-height: $base-line-height;
-    color: $body-color;
-}
+//html,
+//body {
+//    font-family: 'Merriweather', serif;
+//    margin: 0;
+//    padding: 0;
+//    background-color: $bg-color;
+//    font-size: $base-font-size;
+//    line-height: $base-line-height;
+//    color: $body-color;
+//}
 
-div.cover {
-    > img {
-        width: 100%;
-    }
+//div.cover {
+    //> img {
+    //    width: 100%;
+    //}
 
-    > div.cover-text {
-        position: absolute;
-        padding: 1rem 2rem;
-        color: $cover-text-color;
-        background-color: rgba(0, 0, 0, .25);
-        text-shadow: 4px 4px 2px rgba(125, 125, 125, 1);
+    //> div.cover-text {
+        //position: absolute;
+        //padding: 1rem 2rem;
+        //color: $cover-text-color;
+        //background-color: rgba(0, 0, 0, .25);
+        //text-shadow: 4px 4px 2px rgba(125, 125, 125, 1);
 
-        @if ($center-cover-text) {
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+        //@if ($center-cover-text) {
+        //    top: 50%;
+        //    left: 50%;
+        //    transform: translate(-50%, -50%);
+        //}
 
-        @include media-breakpoint-only(xl) {
-            font-size: 5rem;
-        }
+        //@include media-breakpoint-only(xl) {
+        //    font-size: 5rem;
+        //}
 
-        @include media-breakpoint-only(lg) {
-            font-size: 3rem;
-        }
+        //@include media-breakpoint-only(lg) {
+        //    font-size: 3rem;
+        //}
 
-        @include media-breakpoint-only(md) {
-            font-size: 2rem;
-        }
+        //@include media-breakpoint-only(md) {
+        //    font-size: 2rem;
+        //}
 
-        @include media-breakpoint-only(sm) {
-            font-size: 1.5rem;
-        }
-    }
-}
+        //@include media-breakpoint-only(sm) {
+        //    font-size: 1.5rem;
+        //}
+    //}
+//}
 
-div.gallery {
-    text-align: center;
-
-    img {
-        max-width: 100%;
-    }
-}
+//div.gallery {
+//    text-align: center;
+//
+//    img {
+//        max-width: 100%;
+//    }
+//}
 
 .list-style-none {
     margin: 0;
@@ -136,44 +136,44 @@ a {
     }
 }
 
-.gallery-list {
-    div.gallery-item {
-        background-size: 100%;
-        background-position: center;
-        overflow: hidden;
-        height: 7.5rem;
-        margin-bottom: .75rem;
-        border-radius: $border-radius;
-
-        a {
-            color: $white;
-            padding: 0;
-            height: inherit;
-            border: 2px solid rgba($card-link-color, .1);
-            transition: all 200ms;
-
-            &:hover {
-                border-color: rgba($card-link-color, .2);
-                background-color: rgba($card-link-color, .25);
-            }
-
-            &:focus {
-                background-color: rgba($card-link-color, .4);
-            }
-        }
-
-        div.title {
-            width: 101%;
-            padding-left: .5rem;
-            padding-right: .5rem;
-            padding-top: .25rem;
-            padding-bottom: .25rem;
-            margin-top: -1px;
-            margin-left: -1px;
-            text-shadow: 2px 2px 2px rgba($black, .5);
-        }
-    }
-}
+//.gallery-list {
+//    div.gallery-item {
+//        background-size: 100%;
+//        background-position: center;
+//        overflow: hidden;
+//        height: 7.5rem;
+//        margin-bottom: .75rem;
+//        border-radius: $border-radius;
+//
+//        a {
+//            color: $white;
+//            padding: 0;
+//            height: inherit;
+//            border: 2px solid rgba($card-link-color, .1);
+//            transition: all 200ms;
+//
+//            &:hover {
+//                border-color: rgba($card-link-color, .2);
+//                background-color: rgba($card-link-color, .25);
+//            }
+//
+//            &:focus {
+//                background-color: rgba($card-link-color, .4);
+//            }
+//        }
+//
+//        div.title {
+//            width: 101%;
+//            padding-left: .5rem;
+//            padding-right: .5rem;
+//            padding-top: .25rem;
+//            padding-bottom: .25rem;
+//            margin-top: -1px;
+//            margin-left: -1px;
+//            text-shadow: 2px 2px 2px rgba($black, .5);
+//        }
+//    }
+//}
 
 @include media-breakpoint-up(lg) {
     .floating-right {
