@@ -47,10 +47,13 @@ if (!function_exists('getImageDescriptionFor')) {
      */
     function getImageDescriptionFor(Gallery $gallery, Image $image): ?string
     {
-        $hasImageDescription = $gallery->getGalleryInfo() && $gallery->getGalleryInfo()->getImageDescriptions()->get($image->getBasename());
+        $localStorage = Storage::disk('local');
 
-        if ($hasImageDescription) {
-            return $gallery->getGalleryInfo()->getImageDescriptions()->get($image->getBasename());
+        // if there's a Markdown file with the same name as the image we return its contents
+        $markdownFilePath = $image->getDirname() . '/' . $image->getFilename() . '.md';
+
+        if ($localStorage->has($markdownFilePath)) {
+            return parseMarkdown($localStorage->get($markdownFilePath));
         }
 
         return null;
