@@ -27,10 +27,41 @@ module.exports = {
                 ...defaultConfig.backgroundSize,
                 'full': '100%',
             },
+            typography: {
+                default: {
+                    css: {
+                        color: '#ffffff',
+                        a: {
+                            color: '#b56ed8',
+                            textDecoration: 'none',
+                            transition: 'all linear 300ms',
+                            borderBottom: '1px solid transparent',
+                            '&:hover': {
+                                color: '#ceaae5',
+                                textDecoration: 'none',
+                                borderBottom: '1px solid #d4b0e7',
+                            },
+                        },
+                        h1: {
+                            color: '#ffffff',
+                        },
+                        h2: {
+                            color: '#ffffff',
+                        },
+                        h3: {
+                            color: '#ffffff',
+                        },
+                        h4: {
+                            color: '#ffffff',
+                        },
+                    },
+                },
+            },
         },
     },
     variants: {},
     plugins: [
+        require('@tailwindcss/typography'),
         require('tailwindcss-shadow-outline-colors')(),
     ]
 }

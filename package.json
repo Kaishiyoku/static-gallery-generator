@@ -28,6 +28,7 @@
     },
     "homepage": "https://github.com/Kaishiyoku/static-gallery-generator#readme",
     "devDependencies": {
+        "@tailwindcss/typography": "^0.2.0",
         "autoprefixer": "^10.0.1",
         "bootstrap": "^4.5.1",
         "bootstrap-4-grid": "^3.4.0",
