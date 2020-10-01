@@ -7,7 +7,7 @@
                 </div>
 
                 @if (getImageDescriptionFor($gallery, $image))
-                    <div class="prose text-justify pt-4 pb-20">
+                    <div class="prose max-w-none text-justify pt-4 pb-20">
                         {!! getImageDescriptionFor($gallery, $image) !!}
                     </div>
                 @endif

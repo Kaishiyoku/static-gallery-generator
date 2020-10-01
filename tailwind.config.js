@@ -54,6 +54,9 @@ module.exports = {
                         h4: {
                             color: '#ffffff',
                         },
+                        strong: {
+                            color: '#ffffff',
+                        },
                     },
                 },
             },
