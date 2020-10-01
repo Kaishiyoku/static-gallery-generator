@@ -22,7 +22,7 @@ class BuildGalleries extends Command
      *
      * @var int
      */
-    private const MAX_THUMBNAIL_RESIZE_WIDTH = 1500;
+    private const MAX_THUMBNAIL_RESIZE_WIDTH = 1250;
 
     /**
      * The maximum width in pixels images should have
@@ -39,7 +39,7 @@ class BuildGalleries extends Command
     /**
      * @var int
      */
-    private const IMAGE_QUALITY = 85;
+    private const IMAGE_QUALITY = 70;
 
     /**
      * Suffix of the thumbnail filenames
