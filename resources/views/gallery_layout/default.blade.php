@@ -5,9 +5,9 @@
                 @include('_image', ['image' => $image])
             </div>
 
-            @if (getImageDescriptionFor($gallery, $image))
+            @if (getImageDescriptionFor($image))
                 <div class="prose max-w-none text-justify pt-4 pb-20">
-                    {!! getImageDescriptionFor($gallery, $image) !!}
+                    {!! getImageDescriptionFor($image) !!}
                 </div>
             @endif
         @endforeach

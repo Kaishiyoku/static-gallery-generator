@@ -41,11 +41,10 @@ if (!function_exists('getImageDescriptionFor')) {
     /**
      * Get the description of a given image if there is one
      *
-     * @param Gallery $gallery
      * @param Image $image
      * @return string|null
      */
-    function getImageDescriptionFor(Gallery $gallery, Image $image): ?string
+    function getImageDescriptionFor(Image $image): ?string
     {
         $localStorage = Storage::disk('local');
 

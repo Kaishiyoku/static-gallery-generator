@@ -1,13 +1,13 @@
 <div class="container mx-auto px-8">
-    <div class="flex">
+    <div class="lg:flex">
         @foreach ($images->chunk(2) as $chunk)
-            <div class="px-2">
+            <div class="lg:px-4">
                 @foreach ($chunk as $image)
                     @include('_image', ['image' => $image])
 
-                    @if (getImageDescriptionFor($gallery, $image))
+                    @if (getImageDescriptionFor($image))
                         <div class="prose max-w-none text-justify pt-4 pb-20">
-                            {!! getImageDescriptionFor($gallery, $image) !!}
+                            {!! getImageDescriptionFor($image) !!}
                         </div>
                     @endif
                 @endforeach
