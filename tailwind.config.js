@@ -1,4 +1,5 @@
 const defaultConfig = require('tailwindcss/defaultConfig');
+const colors = require('tailwindcss/colors');
 
 module.exports = {
     purge: [
@@ -8,27 +9,14 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                gray: {
-                    50: '#fdfdfd',
-                    100: '#fcfcfc',
-                    200: '#f7f7f7',
-                    300: '#f0f0f0',
-                    400: '#e0e0e0',
-                    450: '#cccccc',
-                    500: '#bfbfbf',
-                    600: '#969696',
-                    700: '#696969',
-                    800: '#474747',
-                    900: '#2b2b2b',
-                    950: '#222222'
-                },
+                gray: colors.trueGray,
             },
             backgroundSize: {
                 ...defaultConfig.backgroundSize,
                 'full': '100%',
             },
             typography: {
-                default: {
+                DEFAULT: {
                     css: {
                         color: '#ffffff',
                         a: {
@@ -61,10 +49,15 @@ module.exports = {
                 },
             },
         },
+        screens: {
+            sm: '640px',
+            md: '768px',
+            lg: '1024px',
+            xl: '1280px',
+        },
     },
     variants: {},
     plugins: [
         require('@tailwindcss/typography'),
-        require('tailwindcss-shadow-outline-colors')(),
     ]
 }
