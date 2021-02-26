@@ -1,7 +1,7 @@
-import mediumZoom from 'medium-zoom'
+import Zooming from 'zooming'
 
-mediumZoom('[data-provide="zoomable"]', {
-    margin: 0,
-    background: '#111111',
-    scrollOffset: 40,
-});
+document.addEventListener('DOMContentLoaded', () => {
+    new Zooming({
+        bgColor: '#111111',
+    }).listen('[data-provide="zoomable"]');
+})

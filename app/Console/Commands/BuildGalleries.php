@@ -29,7 +29,7 @@ class BuildGalleries extends Command
      *
      * @var int
      */
-    private const MAX_IMAGE_RESIZE_WIDTH = 2000;
+    private const MAX_IMAGE_RESIZE_WIDTH = 2500;
 
     /**
      * @var int
