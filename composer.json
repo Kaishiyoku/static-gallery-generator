@@ -5,19 +5,19 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.3",
+        "php": "^7.4|^8.0",
         "ext-json": "*",
-        "flipbox/lumen-generator": "^8.2.0",
+        "flipbox/lumen-generator": "^8.2.1",
         "intervention/image": "^2.5.1",
         "laravel/lumen-framework": "^8.2.3",
         "laravelista/lumen-vendor-publish": "^8.0.0",
-        "league/commonmark": "^1.5.7",
+        "league/commonmark": "^1.6.2",
         "league/flysystem": "^1.1.3",
         "voku/html-min": "^4.4.8"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^2.9.0",
-        "filp/whoops": "^2.9.2",
+        "barryvdh/laravel-ide-helper": "^2.10.0",
+        "filp/whoops": "^2.13.0",
         "fzaninotto/faker": "^1.9.2",
         "mockery/mockery": "^1.4.3",
         "phpunit/phpunit": "^9.3"
