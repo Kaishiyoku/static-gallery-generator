@@ -13,7 +13,8 @@ __webpack_require__.r(__webpack_exports__);
 
 document.addEventListener('DOMContentLoaded', function () {
   new zooming__WEBPACK_IMPORTED_MODULE_0__.default({
-    bgColor: '#111111'
+    bgColor: '#111111',
+    scaleExtra: 2
   }).listen('[data-provide="zoomable"]');
 });
 

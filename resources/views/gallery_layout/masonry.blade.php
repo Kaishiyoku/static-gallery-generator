@@ -1,15 +1,9 @@
 <div class="container mx-auto px-8">
-    <div>
+    <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
         @foreach ($gallery->getImages()->skip(1) as $image)
-            <div class="mt-4">
-                <x-image :image="$image"/>
+            <div>
+                <x-image :image="$image" class="h-40 object-cover"/>
             </div>
-
-            @if (getImageDescriptionFor($image))
-                <div class="prose max-w-none text-justify pt-4 pb-20">
-                    {!! getImageDescriptionFor($image) !!}
-                </div>
-            @endif
         @endforeach
     </div>
 
