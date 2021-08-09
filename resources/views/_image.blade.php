@@ -4,4 +4,5 @@
     data-provide="zoomable"
     data-original="/{{ $image->getPathWithSlug() }}"
     class="w-full"
+    loading="lazy"
 />

@@ -53,7 +53,7 @@ class BuildGalleries extends Command
      *
      * @var string
      */
-    protected $signature = 'galleries:build';
+    protected $signature = 'galleries:build {--skip-images}';
 
     /**
      * The console command description.
@@ -140,6 +140,10 @@ class BuildGalleries extends Command
             $images = $this->getImagesForGallery($galleryData);
 
             $images->each(function (Image $image) use ($publicFilesystem, $galleryData) {
+                if ($this->option('skip-images')) {
+                    return;
+                }
+
                 $resizedThumbnailImageResponse = $this->resizeImage(
                     $image->getPath(),
                     self::MAX_THUMBNAIL_RESIZE_WIDTH,

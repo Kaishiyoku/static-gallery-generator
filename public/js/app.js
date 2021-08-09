@@ -1,1 +1,1167 @@
-(()=>{"use strict";var t={50:()=>{var t="auto",e="zoom-in",i="zoom-out",n="grab",s="move";function o(t,e,i){var n=!(arguments.length>3&&void 0!==arguments[3])||arguments[3],s={passive:!1};n?t.addEventListener(e,i,s):t.removeEventListener(e,i,s)}function r(t,e){if(t){var i=new Image;i.onload=function(){e&&e(i)},i.src=t}}function a(t){return t.dataset.original?t.dataset.original:"A"===t.parentNode.tagName?t.parentNode.getAttribute("href"):null}function l(t,e,i){!function(t){var e=h,i=c;if(t.transition){var n=t.transition;delete t.transition,t[e]=n}if(t.transform){var s=t.transform;delete t.transform,t[i]=s}}(e);var n=t.style,s={};for(var o in e)i&&(s[o]=n[o]||""),n[o]=e[o];return s}var h="transition",c="transform",u="transform",d="transitionend";var f=function(){},p={enableGrab:!0,preloadImage:!1,closeOnWindowResize:!0,transitionDuration:.4,transitionTimingFunction:"cubic-bezier(0.4, 0, 0, 1)",bgColor:"rgb(255, 255, 255)",bgOpacity:1,scaleBase:1,scaleExtra:.5,scrollThreshold:40,zIndex:998,customSize:null,onOpen:f,onClose:f,onGrab:f,onMove:f,onRelease:f,onBeforeOpen:f,onBeforeClose:f,onBeforeGrab:f,onBeforeRelease:f,onImageLoading:f,onImageLoaded:f},y={init:function(t){var e,i;e=this,i=t,Object.getOwnPropertyNames(Object.getPrototypeOf(e)).forEach((function(t){e[t]=e[t].bind(i)}))},click:function(t){if(t.preventDefault(),v(t))return window.open(this.target.srcOriginal||t.currentTarget.src,"_blank");this.shown?this.released?this.close():this.release():this.open(t.currentTarget)},scroll:function(){var t=document.documentElement||document.body.parentNode||document.body,e=window.pageXOffset||t.scrollLeft,i=window.pageYOffset||t.scrollTop;null===this.lastScrollPosition&&(this.lastScrollPosition={x:e,y:i});var n=this.lastScrollPosition.x-e,s=this.lastScrollPosition.y-i,o=this.options.scrollThreshold;(Math.abs(s)>=o||Math.abs(n)>=o)&&(this.lastScrollPosition=null,this.close())},keydown:function(t){(function(t){return"Escape"===(t.key||t.code)||27===t.keyCode})(t)&&(this.released?this.close():this.release(this.close))},mousedown:function(t){if(g(t)&&!v(t)){t.preventDefault();var e=t.clientX,i=t.clientY;this.pressTimer=setTimeout(function(){this.grab(e,i)}.bind(this),200)}},mousemove:function(t){this.released||this.move(t.clientX,t.clientY)},mouseup:function(t){g(t)&&!v(t)&&(clearTimeout(this.pressTimer),this.released?this.close():this.release())},touchstart:function(t){t.preventDefault();var e=t.touches[0],i=e.clientX,n=e.clientY;this.pressTimer=setTimeout(function(){this.grab(i,n)}.bind(this),200)},touchmove:function(t){if(!this.released){var e=t.touches[0],i=e.clientX,n=e.clientY;this.move(i,n)}},touchend:function(t){(function(t){t.targetTouches.length})(t)||(clearTimeout(this.pressTimer),this.released?this.close():this.release())},clickOverlay:function(){this.close()},resizeWindow:function(){this.close()}};function g(t){return 0===t.button}function v(t){return t.metaKey||t.ctrlKey}var m={init:function(t){this.el=document.createElement("div"),this.instance=t,this.parent=document.body,l(this.el,{position:"fixed",top:0,left:0,right:0,bottom:0,opacity:0}),this.updateStyle(t.options),o(this.el,"click",t.handler.clickOverlay.bind(t))},updateStyle:function(t){l(this.el,{zIndex:t.zIndex,backgroundColor:t.bgColor,transition:"opacity\n        "+t.transitionDuration+"s\n        "+t.transitionTimingFunction})},insert:function(){this.parent.appendChild(this.el)},remove:function(){this.parent.removeChild(this.el)},fadeIn:function(){this.el.offsetWidth,this.el.style.opacity=this.instance.options.bgOpacity},fadeOut:function(){this.el.style.opacity=0}},b="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},w=function(){function t(t,e){for(var i=0;i<e.length;i++){var n=e[i];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}return function(e,i,n){return i&&t(e.prototype,i),n&&t(e,n),e}}(),x=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var i=arguments[e];for(var n in i)Object.prototype.hasOwnProperty.call(i,n)&&(t[n]=i[n])}return t},O={init:function(t,e){this.el=t,this.instance=e,this.srcThumbnail=this.el.getAttribute("src"),this.srcset=this.el.getAttribute("srcset"),this.srcOriginal=a(this.el),this.rect=this.el.getBoundingClientRect(),this.translate=null,this.scale=null,this.styleOpen=null,this.styleClose=null},zoomIn:function(){var t=this.instance.options,e=t.zIndex,s=t.enableGrab,o=t.transitionDuration,r=t.transitionTimingFunction;this.translate=this.calculateTranslate(),this.scale=this.calculateScale(),this.styleOpen={position:"relative",zIndex:e+1,cursor:s?n:i,transition:u+"\n        "+o+"s\n        "+r,transform:"translate3d("+this.translate.x+"px, "+this.translate.y+"px, 0px)\n        scale("+this.scale.x+","+this.scale.y+")",height:this.rect.height+"px",width:this.rect.width+"px"},this.el.offsetWidth,this.styleClose=l(this.el,this.styleOpen,!0)},zoomOut:function(){this.el.offsetWidth,l(this.el,{transform:"none"})},grab:function(t,e,i){var n=k(),o=n.x-t,r=n.y-e;l(this.el,{cursor:s,transform:"translate3d(\n        "+(this.translate.x+o)+"px, "+(this.translate.y+r)+"px, 0px)\n        scale("+(this.scale.x+i)+","+(this.scale.y+i)+")"})},move:function(t,e,i){var n=k(),s=n.x-t,o=n.y-e;l(this.el,{transition:u,transform:"translate3d(\n        "+(this.translate.x+s)+"px, "+(this.translate.y+o)+"px, 0px)\n        scale("+(this.scale.x+i)+","+(this.scale.y+i)+")"})},restoreCloseStyle:function(){l(this.el,this.styleClose)},restoreOpenStyle:function(){l(this.el,this.styleOpen)},upgradeSource:function(){if(this.srcOriginal){var t=this.el.parentNode;this.srcset&&this.el.removeAttribute("srcset");var e=this.el.cloneNode(!1);e.setAttribute("src",this.srcOriginal),e.style.position="fixed",e.style.visibility="hidden",t.appendChild(e),setTimeout(function(){this.el.setAttribute("src",this.srcOriginal),t.removeChild(e)}.bind(this),50)}},downgradeSource:function(){this.srcOriginal&&(this.srcset&&this.el.setAttribute("srcset",this.srcset),this.el.setAttribute("src",this.srcThumbnail))},calculateTranslate:function(){var t=k(),e=this.rect.left+this.rect.width/2,i=this.rect.top+this.rect.height/2;return{x:t.x-e,y:t.y-i}},calculateScale:function(){var t=this.el.dataset,e=t.zoomingHeight,i=t.zoomingWidth,n=this.instance.options,s=n.customSize,o=n.scaleBase;if(!s&&e&&i)return{x:i/this.rect.width,y:e/this.rect.height};if(s&&"object"===(void 0===s?"undefined":b(s)))return{x:s.width/this.rect.width,y:s.height/this.rect.height};var r=this.rect.width/2,a=this.rect.height/2,l=k(),h={x:l.x-r,y:l.y-a},c=h.x/r,u=h.y/a,d=o+Math.min(c,u);if(s&&"string"==typeof s){var f=i||this.el.naturalWidth,p=e||this.el.naturalHeight,y=parseFloat(s)*f/(100*this.rect.width),g=parseFloat(s)*p/(100*this.rect.height);if(d>y||d>g)return{x:y,y:g}}return{x:d,y:d}}};function k(){var t=document.documentElement;return{x:Math.min(t.clientWidth,window.innerWidth)/2,y:Math.min(t.clientHeight,window.innerHeight)/2}}function S(t,e,i){["mousedown","mousemove","mouseup","touchstart","touchmove","touchend"].forEach((function(n){o(t,n,e[n],i)}))}const z=function(){function i(t){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,i),this.target=Object.create(O),this.overlay=Object.create(m),this.handler=Object.create(y),this.body=document.body,this.shown=!1,this.lock=!1,this.released=!0,this.lastScrollPosition=null,this.pressTimer=null,this.options=x({},p,t),this.overlay.init(this),this.handler.init(this)}return w(i,[{key:"listen",value:function(t){if("string"==typeof t)for(var i=document.querySelectorAll(t),n=i.length;n--;)this.listen(i[n]);else"IMG"===t.tagName&&(t.style.cursor=e,o(t,"click",this.handler.click),this.options.preloadImage&&r(a(t)));return this}},{key:"config",value:function(t){return t?(x(this.options,t),this.overlay.updateStyle(this.options),this):this.options}},{key:"open",value:function(t){var e=this,i=arguments.length>1&&void 0!==arguments[1]?arguments[1]:this.options.onOpen;if(!this.shown&&!this.lock){var n="string"==typeof t?document.querySelector(t):t;if("IMG"===n.tagName){if(this.options.onBeforeOpen(n),this.target.init(n,this),!this.options.preloadImage){var s=this.target.srcOriginal;null!=s&&(this.options.onImageLoading(n),r(s,this.options.onImageLoaded))}this.shown=!0,this.lock=!0,this.target.zoomIn(),this.overlay.insert(),this.overlay.fadeIn(),o(document,"scroll",this.handler.scroll),o(document,"keydown",this.handler.keydown),this.options.closeOnWindowResize&&o(window,"resize",this.handler.resizeWindow);var a=function t(){o(n,d,t,!1),e.lock=!1,e.target.upgradeSource(),e.options.enableGrab&&S(document,e.handler,!0),i(n)};return o(n,d,a),this}}}},{key:"close",value:function(){var e=this,i=arguments.length>0&&void 0!==arguments[0]?arguments[0]:this.options.onClose;if(this.shown&&!this.lock){var n=this.target.el;this.options.onBeforeClose(n),this.lock=!0,this.body.style.cursor=t,this.overlay.fadeOut(),this.target.zoomOut(),o(document,"scroll",this.handler.scroll,!1),o(document,"keydown",this.handler.keydown,!1),this.options.closeOnWindowResize&&o(window,"resize",this.handler.resizeWindow,!1);var s=function t(){o(n,d,t,!1),e.shown=!1,e.lock=!1,e.target.downgradeSource(),e.options.enableGrab&&S(document,e.handler,!1),e.target.restoreCloseStyle(),e.overlay.remove(),i(n)};return o(n,d,s),this}}},{key:"grab",value:function(t,e){var i=arguments.length>2&&void 0!==arguments[2]?arguments[2]:this.options.scaleExtra,n=arguments.length>3&&void 0!==arguments[3]?arguments[3]:this.options.onGrab;if(this.shown&&!this.lock){var s=this.target.el;this.options.onBeforeGrab(s),this.released=!1,this.target.grab(t,e,i);var r=function t(){o(s,d,t,!1),n(s)};return o(s,d,r),this}}},{key:"move",value:function(t,e){var i=arguments.length>2&&void 0!==arguments[2]?arguments[2]:this.options.scaleExtra,n=arguments.length>3&&void 0!==arguments[3]?arguments[3]:this.options.onMove;if(this.shown&&!this.lock){this.released=!1,this.body.style.cursor=s,this.target.move(t,e,i);var r=this.target.el,a=function t(){o(r,d,t,!1),n(r)};return o(r,d,a),this}}},{key:"release",value:function(){var e=this,i=arguments.length>0&&void 0!==arguments[0]?arguments[0]:this.options.onRelease;if(this.shown&&!this.lock){var n=this.target.el;this.options.onBeforeRelease(n),this.lock=!0,this.body.style.cursor=t,this.target.restoreOpenStyle();var s=function t(){o(n,d,t,!1),e.lock=!1,e.released=!0,i(n)};return o(n,d,s),this}}}]),i}();document.addEventListener("DOMContentLoaded",(function(){new z({bgColor:"#111111"}).listen('[data-provide="zoomable"]')}))},662:()=>{}},e={};function i(n){if(e[n])return e[n].exports;var s=e[n]={exports:{}};return t[n](s,s.exports,i),s.exports}i.m=t,i.x=t=>{},i.o=(t,e)=>Object.prototype.hasOwnProperty.call(t,e),(()=>{var t={773:0},e=[[50],[662]],n=t=>{},s=(s,o)=>{for(var r,a,[l,h,c,u]=o,d=0,f=[];d<l.length;d++)a=l[d],i.o(t,a)&&t[a]&&f.push(t[a][0]),t[a]=0;for(r in h)i.o(h,r)&&(i.m[r]=h[r]);for(c&&c(i),s&&s(o);f.length;)f.shift()();return u&&e.push.apply(e,u),n()},o=self.webpackChunkstatic_gallery_generator=self.webpackChunkstatic_gallery_generator||[];function r(){for(var n,s=0;s<e.length;s++){for(var o=e[s],r=!0,a=1;a<o.length;a++){var l=o[a];0!==t[l]&&(r=!1)}r&&(e.splice(s--,1),n=i(i.s=o[0]))}return 0===e.length&&(i.x(),i.x=t=>{}),n}o.forEach(s.bind(null,0)),o.push=s.bind(null,o.push.bind(o));var a=i.x;i.x=()=>(i.x=a||(t=>{}),(n=r)())})();i.x()})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./resources/js/app.js":
+/*!*****************************!*\
+  !*** ./resources/js/app.js ***!
+  \*****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var zooming__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zooming */ "./node_modules/zooming/build/zooming.module.js");
+
+document.addEventListener('DOMContentLoaded', function () {
+  new zooming__WEBPACK_IMPORTED_MODULE_0__.default({
+    bgColor: '#111111'
+  }).listen('[data-provide="zoomable"]');
+});
+
+/***/ }),
+
+/***/ "./resources/css/app.css":
+/*!*******************************!*\
+  !*** ./resources/css/app.css ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./node_modules/zooming/build/zooming.module.js":
+/*!******************************************************!*\
+  !*** ./node_modules/zooming/build/zooming.module.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var cursor = {
+  default: 'auto',
+  zoomIn: 'zoom-in',
+  zoomOut: 'zoom-out',
+  grab: 'grab',
+  move: 'move'
+};
+
+function listen(el, event, handler) {
+  var add = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+
+  var options = { passive: false };
+
+  if (add) {
+    el.addEventListener(event, handler, options);
+  } else {
+    el.removeEventListener(event, handler, options);
+  }
+}
+
+function loadImage(src, cb) {
+  if (src) {
+    var img = new Image();
+
+    img.onload = function onImageLoad() {
+      if (cb) cb(img);
+    };
+
+    img.src = src;
+  }
+}
+
+function getOriginalSource(el) {
+  if (el.dataset.original) {
+    return el.dataset.original;
+  } else if (el.parentNode.tagName === 'A') {
+    return el.parentNode.getAttribute('href');
+  } else {
+    return null;
+  }
+}
+
+function setStyle(el, styles, remember) {
+  checkTrans(styles);
+
+  var s = el.style;
+  var original = {};
+
+  for (var key in styles) {
+    if (remember) {
+      original[key] = s[key] || '';
+    }
+
+    s[key] = styles[key];
+  }
+
+  return original;
+}
+
+function bindAll(_this, that) {
+  var methods = Object.getOwnPropertyNames(Object.getPrototypeOf(_this));
+  methods.forEach(function bindOne(method) {
+    _this[method] = _this[method].bind(that);
+  });
+}
+
+var trans = {
+  transitionProp: 'transition',
+  transEndEvent: 'transitionend',
+  transformProp: 'transform',
+  transformCssProp: 'transform'
+};
+var transformCssProp = trans.transformCssProp,
+    transEndEvent = trans.transEndEvent;
+
+
+function checkTrans(styles) {
+  var transitionProp = trans.transitionProp,
+      transformProp = trans.transformProp;
+
+
+  if (styles.transition) {
+    var value = styles.transition;
+    delete styles.transition;
+    styles[transitionProp] = value;
+  }
+
+  if (styles.transform) {
+    var _value = styles.transform;
+    delete styles.transform;
+    styles[transformProp] = _value;
+  }
+}
+
+var noop = function noop() {};
+
+var DEFAULT_OPTIONS = {
+  /**
+   * To be able to grab and drag the image for extra zoom-in.
+   * @type {boolean}
+   */
+  enableGrab: true,
+
+  /**
+   * Preload zoomable images.
+   * @type {boolean}
+   */
+  preloadImage: false,
+
+  /**
+   * Close the zoomed image when browser window is resized.
+   * @type {boolean}
+   */
+  closeOnWindowResize: true,
+
+  /**
+   * Transition duration in seconds.
+   * @type {number}
+   */
+  transitionDuration: 0.4,
+
+  /**
+   * Transition timing function.
+   * @type {string}
+   */
+  transitionTimingFunction: 'cubic-bezier(0.4, 0, 0, 1)',
+
+  /**
+   * Overlay background color.
+   * @type {string}
+   */
+  bgColor: 'rgb(255, 255, 255)',
+
+  /**
+   * Overlay background opacity.
+   * @type {number}
+   */
+  bgOpacity: 1,
+
+  /**
+   * The base scale factor for zooming. By default scale to fit the window.
+   * @type {number}
+   */
+  scaleBase: 1.0,
+
+  /**
+   * The additional scale factor when grabbing the image.
+   * @type {number}
+   */
+  scaleExtra: 0.5,
+
+  /**
+   * How much scrolling it takes before closing out.
+   * @type {number}
+   */
+  scrollThreshold: 40,
+
+  /**
+   * The z-index that the overlay will be added with.
+   * @type {number}
+   */
+  zIndex: 998,
+
+  /**
+   * Scale (zoom in) to given width and height. Ignore scaleBase if set.
+   * Alternatively, provide a percentage value relative to the original image size.
+   * @type {Object|String}
+   * @example
+   * customSize: { width: 800, height: 400 }
+   * customSize: 100%
+   */
+  customSize: null,
+
+  /**
+   * A callback function that will be called when a target is opened and
+   * transition has ended. It will get the target element as the argument.
+   * @type {Function}
+   */
+  onOpen: noop,
+
+  /**
+   * Same as above, except fired when closed.
+   * @type {Function}
+   */
+  onClose: noop,
+
+  /**
+   * Same as above, except fired when grabbed.
+   * @type {Function}
+   */
+  onGrab: noop,
+
+  /**
+   * Same as above, except fired when moved.
+   * @type {Function}
+   */
+  onMove: noop,
+
+  /**
+   * Same as above, except fired when released.
+   * @type {Function}
+   */
+  onRelease: noop,
+
+  /**
+   * A callback function that will be called before open.
+   * @type {Function}
+   */
+  onBeforeOpen: noop,
+
+  /**
+   * A callback function that will be called before close.
+   * @type {Function}
+   */
+  onBeforeClose: noop,
+
+  /**
+   * A callback function that will be called before grab.
+   * @type {Function}
+   */
+  onBeforeGrab: noop,
+
+  /**
+   * A callback function that will be called before release.
+   * @type {Function}
+   */
+  onBeforeRelease: noop,
+
+  /**
+   * A callback function that will be called when the hi-res image is loading.
+   * @type {Function}
+   */
+  onImageLoading: noop,
+
+  /**
+   * A callback function that will be called when the hi-res image is loaded.
+   * @type {Function}
+   */
+  onImageLoaded: noop
+};
+
+var PRESS_DELAY = 200;
+
+var handler = {
+  init: function init(instance) {
+    bindAll(this, instance);
+  },
+  click: function click(e) {
+    e.preventDefault();
+
+    if (isPressingMetaKey(e)) {
+      return window.open(this.target.srcOriginal || e.currentTarget.src, '_blank');
+    } else {
+      if (this.shown) {
+        if (this.released) {
+          this.close();
+        } else {
+          this.release();
+        }
+      } else {
+        this.open(e.currentTarget);
+      }
+    }
+  },
+  scroll: function scroll() {
+    var el = document.documentElement || document.body.parentNode || document.body;
+    var scrollLeft = window.pageXOffset || el.scrollLeft;
+    var scrollTop = window.pageYOffset || el.scrollTop;
+
+    if (this.lastScrollPosition === null) {
+      this.lastScrollPosition = {
+        x: scrollLeft,
+        y: scrollTop
+      };
+    }
+
+    var deltaX = this.lastScrollPosition.x - scrollLeft;
+    var deltaY = this.lastScrollPosition.y - scrollTop;
+    var threshold = this.options.scrollThreshold;
+
+    if (Math.abs(deltaY) >= threshold || Math.abs(deltaX) >= threshold) {
+      this.lastScrollPosition = null;
+      this.close();
+    }
+  },
+  keydown: function keydown(e) {
+    if (isEscape(e)) {
+      if (this.released) {
+        this.close();
+      } else {
+        this.release(this.close);
+      }
+    }
+  },
+  mousedown: function mousedown(e) {
+    if (!isLeftButton(e) || isPressingMetaKey(e)) return;
+    e.preventDefault();
+    var clientX = e.clientX,
+        clientY = e.clientY;
+
+
+    this.pressTimer = setTimeout(function grabOnMouseDown() {
+      this.grab(clientX, clientY);
+    }.bind(this), PRESS_DELAY);
+  },
+  mousemove: function mousemove(e) {
+    if (this.released) return;
+    this.move(e.clientX, e.clientY);
+  },
+  mouseup: function mouseup(e) {
+    if (!isLeftButton(e) || isPressingMetaKey(e)) return;
+    clearTimeout(this.pressTimer);
+
+    if (this.released) {
+      this.close();
+    } else {
+      this.release();
+    }
+  },
+  touchstart: function touchstart(e) {
+    e.preventDefault();
+    var _e$touches$ = e.touches[0],
+        clientX = _e$touches$.clientX,
+        clientY = _e$touches$.clientY;
+
+
+    this.pressTimer = setTimeout(function grabOnTouchStart() {
+      this.grab(clientX, clientY);
+    }.bind(this), PRESS_DELAY);
+  },
+  touchmove: function touchmove(e) {
+    if (this.released) return;
+
+    var _e$touches$2 = e.touches[0],
+        clientX = _e$touches$2.clientX,
+        clientY = _e$touches$2.clientY;
+
+    this.move(clientX, clientY);
+  },
+  touchend: function touchend(e) {
+    if (isTouching(e)) return;
+    clearTimeout(this.pressTimer);
+
+    if (this.released) {
+      this.close();
+    } else {
+      this.release();
+    }
+  },
+  clickOverlay: function clickOverlay() {
+    this.close();
+  },
+  resizeWindow: function resizeWindow() {
+    this.close();
+  }
+};
+
+function isLeftButton(e) {
+  return e.button === 0;
+}
+
+function isPressingMetaKey(e) {
+  return e.metaKey || e.ctrlKey;
+}
+
+function isTouching(e) {
+  e.targetTouches.length > 0;
+}
+
+function isEscape(e) {
+  var code = e.key || e.code;
+  return code === 'Escape' || e.keyCode === 27;
+}
+
+var overlay = {
+  init: function init(instance) {
+    this.el = document.createElement('div');
+    this.instance = instance;
+    this.parent = document.body;
+
+    setStyle(this.el, {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      opacity: 0
+    });
+
+    this.updateStyle(instance.options);
+    listen(this.el, 'click', instance.handler.clickOverlay.bind(instance));
+  },
+  updateStyle: function updateStyle(options) {
+    setStyle(this.el, {
+      zIndex: options.zIndex,
+      backgroundColor: options.bgColor,
+      transition: 'opacity\n        ' + options.transitionDuration + 's\n        ' + options.transitionTimingFunction
+    });
+  },
+  insert: function insert() {
+    this.parent.appendChild(this.el);
+  },
+  remove: function remove() {
+    this.parent.removeChild(this.el);
+  },
+  fadeIn: function fadeIn() {
+    this.el.offsetWidth;
+    this.el.style.opacity = this.instance.options.bgOpacity;
+  },
+  fadeOut: function fadeOut() {
+    this.el.style.opacity = 0;
+  }
+};
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+// Translate z-axis to fix CSS grid display issue in Chrome:
+// https://github.com/kingdido999/zooming/issues/42
+var TRANSLATE_Z = 0;
+
+var target = {
+  init: function init(el, instance) {
+    this.el = el;
+    this.instance = instance;
+    this.srcThumbnail = this.el.getAttribute('src');
+    this.srcset = this.el.getAttribute('srcset');
+    this.srcOriginal = getOriginalSource(this.el);
+    this.rect = this.el.getBoundingClientRect();
+    this.translate = null;
+    this.scale = null;
+    this.styleOpen = null;
+    this.styleClose = null;
+  },
+  zoomIn: function zoomIn() {
+    var _instance$options = this.instance.options,
+        zIndex = _instance$options.zIndex,
+        enableGrab = _instance$options.enableGrab,
+        transitionDuration = _instance$options.transitionDuration,
+        transitionTimingFunction = _instance$options.transitionTimingFunction;
+
+    this.translate = this.calculateTranslate();
+    this.scale = this.calculateScale();
+
+    this.styleOpen = {
+      position: 'relative',
+      zIndex: zIndex + 1,
+      cursor: enableGrab ? cursor.grab : cursor.zoomOut,
+      transition: transformCssProp + '\n        ' + transitionDuration + 's\n        ' + transitionTimingFunction,
+      transform: 'translate3d(' + this.translate.x + 'px, ' + this.translate.y + 'px, ' + TRANSLATE_Z + 'px)\n        scale(' + this.scale.x + ',' + this.scale.y + ')',
+      height: this.rect.height + 'px',
+      width: this.rect.width + 'px'
+
+      // Force layout update
+    };this.el.offsetWidth;
+
+    // Trigger transition
+    this.styleClose = setStyle(this.el, this.styleOpen, true);
+  },
+  zoomOut: function zoomOut() {
+    // Force layout update
+    this.el.offsetWidth;
+
+    setStyle(this.el, { transform: 'none' });
+  },
+  grab: function grab(x, y, scaleExtra) {
+    var windowCenter = getWindowCenter();
+    var dx = windowCenter.x - x,
+        dy = windowCenter.y - y;
+
+
+    setStyle(this.el, {
+      cursor: cursor.move,
+      transform: 'translate3d(\n        ' + (this.translate.x + dx) + 'px, ' + (this.translate.y + dy) + 'px, ' + TRANSLATE_Z + 'px)\n        scale(' + (this.scale.x + scaleExtra) + ',' + (this.scale.y + scaleExtra) + ')'
+    });
+  },
+  move: function move(x, y, scaleExtra) {
+    var windowCenter = getWindowCenter();
+    var dx = windowCenter.x - x,
+        dy = windowCenter.y - y;
+
+
+    setStyle(this.el, {
+      transition: transformCssProp,
+      transform: 'translate3d(\n        ' + (this.translate.x + dx) + 'px, ' + (this.translate.y + dy) + 'px, ' + TRANSLATE_Z + 'px)\n        scale(' + (this.scale.x + scaleExtra) + ',' + (this.scale.y + scaleExtra) + ')'
+    });
+  },
+  restoreCloseStyle: function restoreCloseStyle() {
+    setStyle(this.el, this.styleClose);
+  },
+  restoreOpenStyle: function restoreOpenStyle() {
+    setStyle(this.el, this.styleOpen);
+  },
+  upgradeSource: function upgradeSource() {
+    if (this.srcOriginal) {
+      var parentNode = this.el.parentNode;
+
+      if (this.srcset) {
+        this.el.removeAttribute('srcset');
+      }
+
+      var temp = this.el.cloneNode(false);
+
+      // Force compute the hi-res image in DOM to prevent
+      // image flickering while updating src
+      temp.setAttribute('src', this.srcOriginal);
+      temp.style.position = 'fixed';
+      temp.style.visibility = 'hidden';
+      parentNode.appendChild(temp);
+
+      // Add delay to prevent Firefox from flickering
+      setTimeout(function updateSrc() {
+        this.el.setAttribute('src', this.srcOriginal);
+        parentNode.removeChild(temp);
+      }.bind(this), 50);
+    }
+  },
+  downgradeSource: function downgradeSource() {
+    if (this.srcOriginal) {
+      if (this.srcset) {
+        this.el.setAttribute('srcset', this.srcset);
+      }
+      this.el.setAttribute('src', this.srcThumbnail);
+    }
+  },
+  calculateTranslate: function calculateTranslate() {
+    var windowCenter = getWindowCenter();
+    var targetCenter = {
+      x: this.rect.left + this.rect.width / 2,
+      y: this.rect.top + this.rect.height / 2
+
+      // The vector to translate image to the window center
+    };return {
+      x: windowCenter.x - targetCenter.x,
+      y: windowCenter.y - targetCenter.y
+    };
+  },
+  calculateScale: function calculateScale() {
+    var _el$dataset = this.el.dataset,
+        zoomingHeight = _el$dataset.zoomingHeight,
+        zoomingWidth = _el$dataset.zoomingWidth;
+    var _instance$options2 = this.instance.options,
+        customSize = _instance$options2.customSize,
+        scaleBase = _instance$options2.scaleBase;
+
+
+    if (!customSize && zoomingHeight && zoomingWidth) {
+      return {
+        x: zoomingWidth / this.rect.width,
+        y: zoomingHeight / this.rect.height
+      };
+    } else if (customSize && (typeof customSize === 'undefined' ? 'undefined' : _typeof(customSize)) === 'object') {
+      return {
+        x: customSize.width / this.rect.width,
+        y: customSize.height / this.rect.height
+      };
+    } else {
+      var targetHalfWidth = this.rect.width / 2;
+      var targetHalfHeight = this.rect.height / 2;
+      var windowCenter = getWindowCenter();
+
+      // The distance between target edge and window edge
+      var targetEdgeToWindowEdge = {
+        x: windowCenter.x - targetHalfWidth,
+        y: windowCenter.y - targetHalfHeight
+      };
+
+      var scaleHorizontally = targetEdgeToWindowEdge.x / targetHalfWidth;
+      var scaleVertically = targetEdgeToWindowEdge.y / targetHalfHeight;
+
+      // The additional scale is based on the smaller value of
+      // scaling horizontally and scaling vertically
+      var scale = scaleBase + Math.min(scaleHorizontally, scaleVertically);
+
+      if (customSize && typeof customSize === 'string') {
+        // Use zoomingWidth and zoomingHeight if available
+        var naturalWidth = zoomingWidth || this.el.naturalWidth;
+        var naturalHeight = zoomingHeight || this.el.naturalHeight;
+        var maxZoomingWidth = parseFloat(customSize) * naturalWidth / (100 * this.rect.width);
+        var maxZoomingHeight = parseFloat(customSize) * naturalHeight / (100 * this.rect.height);
+
+        // Only scale image up to the specified customSize percentage
+        if (scale > maxZoomingWidth || scale > maxZoomingHeight) {
+          return {
+            x: maxZoomingWidth,
+            y: maxZoomingHeight
+          };
+        }
+      }
+
+      return {
+        x: scale,
+        y: scale
+      };
+    }
+  }
+};
+
+function getWindowCenter() {
+  var docEl = document.documentElement;
+  var windowWidth = Math.min(docEl.clientWidth, window.innerWidth);
+  var windowHeight = Math.min(docEl.clientHeight, window.innerHeight);
+
+  return {
+    x: windowWidth / 2,
+    y: windowHeight / 2
+  };
+}
+
+/**
+ * Zooming instance.
+ */
+
+var Zooming = function () {
+  /**
+   * @param {Object} [options] Update default options if provided.
+   */
+  function Zooming(options) {
+    classCallCheck(this, Zooming);
+
+    this.target = Object.create(target);
+    this.overlay = Object.create(overlay);
+    this.handler = Object.create(handler);
+    this.body = document.body;
+
+    this.shown = false;
+    this.lock = false;
+    this.released = true;
+    this.lastScrollPosition = null;
+    this.pressTimer = null;
+
+    this.options = _extends({}, DEFAULT_OPTIONS, options);
+    this.overlay.init(this);
+    this.handler.init(this);
+  }
+
+  /**
+   * Make element(s) zoomable.
+   * @param  {string|Element} el A css selector or an Element.
+   * @return {this}
+   */
+
+
+  createClass(Zooming, [{
+    key: 'listen',
+    value: function listen$$1(el) {
+      if (typeof el === 'string') {
+        var els = document.querySelectorAll(el);
+        var i = els.length;
+
+        while (i--) {
+          this.listen(els[i]);
+        }
+      } else if (el.tagName === 'IMG') {
+        el.style.cursor = cursor.zoomIn;
+        listen(el, 'click', this.handler.click);
+
+        if (this.options.preloadImage) {
+          loadImage(getOriginalSource(el));
+        }
+      }
+
+      return this;
+    }
+
+    /**
+     * Update options or return current options if no argument is provided.
+     * @param  {Object} options An Object that contains this.options.
+     * @return {this|this.options}
+     */
+
+  }, {
+    key: 'config',
+    value: function config(options) {
+      if (options) {
+        _extends(this.options, options);
+        this.overlay.updateStyle(this.options);
+        return this;
+      } else {
+        return this.options;
+      }
+    }
+
+    /**
+     * Open (zoom in) the Element.
+     * @param  {Element} el The Element to open.
+     * @param  {Function} [cb=this.options.onOpen] A callback function that will
+     * be called when a target is opened and transition has ended. It will get
+     * the target element as the argument.
+     * @return {this}
+     */
+
+  }, {
+    key: 'open',
+    value: function open(el) {
+      var _this = this;
+
+      var cb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.options.onOpen;
+
+      if (this.shown || this.lock) return;
+
+      var target$$1 = typeof el === 'string' ? document.querySelector(el) : el;
+
+      if (target$$1.tagName !== 'IMG') return;
+
+      this.options.onBeforeOpen(target$$1);
+
+      this.target.init(target$$1, this);
+
+      if (!this.options.preloadImage) {
+        var srcOriginal = this.target.srcOriginal;
+
+
+        if (srcOriginal != null) {
+          this.options.onImageLoading(target$$1);
+          loadImage(srcOriginal, this.options.onImageLoaded);
+        }
+      }
+
+      this.shown = true;
+      this.lock = true;
+
+      this.target.zoomIn();
+      this.overlay.insert();
+      this.overlay.fadeIn();
+
+      listen(document, 'scroll', this.handler.scroll);
+      listen(document, 'keydown', this.handler.keydown);
+
+      if (this.options.closeOnWindowResize) {
+        listen(window, 'resize', this.handler.resizeWindow);
+      }
+
+      var onOpenEnd = function onOpenEnd() {
+        listen(target$$1, transEndEvent, onOpenEnd, false);
+        _this.lock = false;
+        _this.target.upgradeSource();
+
+        if (_this.options.enableGrab) {
+          toggleGrabListeners(document, _this.handler, true);
+        }
+
+        cb(target$$1);
+      };
+
+      listen(target$$1, transEndEvent, onOpenEnd);
+
+      return this;
+    }
+
+    /**
+     * Close (zoom out) the Element currently opened.
+     * @param  {Function} [cb=this.options.onClose] A callback function that will
+     * be called when a target is closed and transition has ended. It will get
+     * the target element as the argument.
+     * @return {this}
+     */
+
+  }, {
+    key: 'close',
+    value: function close() {
+      var _this2 = this;
+
+      var cb = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.onClose;
+
+      if (!this.shown || this.lock) return;
+
+      var target$$1 = this.target.el;
+
+      this.options.onBeforeClose(target$$1);
+
+      this.lock = true;
+      this.body.style.cursor = cursor.default;
+      this.overlay.fadeOut();
+      this.target.zoomOut();
+
+      listen(document, 'scroll', this.handler.scroll, false);
+      listen(document, 'keydown', this.handler.keydown, false);
+
+      if (this.options.closeOnWindowResize) {
+        listen(window, 'resize', this.handler.resizeWindow, false);
+      }
+
+      var onCloseEnd = function onCloseEnd() {
+        listen(target$$1, transEndEvent, onCloseEnd, false);
+
+        _this2.shown = false;
+        _this2.lock = false;
+
+        _this2.target.downgradeSource();
+
+        if (_this2.options.enableGrab) {
+          toggleGrabListeners(document, _this2.handler, false);
+        }
+
+        _this2.target.restoreCloseStyle();
+        _this2.overlay.remove();
+
+        cb(target$$1);
+      };
+
+      listen(target$$1, transEndEvent, onCloseEnd);
+
+      return this;
+    }
+
+    /**
+     * Grab the Element currently opened given a position and apply extra zoom-in.
+     * @param  {number}   x The X-axis of where the press happened.
+     * @param  {number}   y The Y-axis of where the press happened.
+     * @param  {number}   scaleExtra Extra zoom-in to apply.
+     * @param  {Function} [cb=this.options.onGrab] A callback function that
+     * will be called when a target is grabbed and transition has ended. It
+     * will get the target element as the argument.
+     * @return {this}
+     */
+
+  }, {
+    key: 'grab',
+    value: function grab(x, y) {
+      var scaleExtra = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.options.scaleExtra;
+      var cb = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : this.options.onGrab;
+
+      if (!this.shown || this.lock) return;
+
+      var target$$1 = this.target.el;
+
+      this.options.onBeforeGrab(target$$1);
+
+      this.released = false;
+      this.target.grab(x, y, scaleExtra);
+
+      var onGrabEnd = function onGrabEnd() {
+        listen(target$$1, transEndEvent, onGrabEnd, false);
+        cb(target$$1);
+      };
+
+      listen(target$$1, transEndEvent, onGrabEnd);
+
+      return this;
+    }
+
+    /**
+     * Move the Element currently grabbed given a position and apply extra zoom-in.
+     * @param  {number}   x The X-axis of where the press happened.
+     * @param  {number}   y The Y-axis of where the press happened.
+     * @param  {number}   scaleExtra Extra zoom-in to apply.
+     * @param  {Function} [cb=this.options.onMove] A callback function that
+     * will be called when a target is moved and transition has ended. It will
+     * get the target element as the argument.
+     * @return {this}
+     */
+
+  }, {
+    key: 'move',
+    value: function move(x, y) {
+      var scaleExtra = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.options.scaleExtra;
+      var cb = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : this.options.onMove;
+
+      if (!this.shown || this.lock) return;
+
+      this.released = false;
+      this.body.style.cursor = cursor.move;
+      this.target.move(x, y, scaleExtra);
+
+      var target$$1 = this.target.el;
+
+      var onMoveEnd = function onMoveEnd() {
+        listen(target$$1, transEndEvent, onMoveEnd, false);
+        cb(target$$1);
+      };
+
+      listen(target$$1, transEndEvent, onMoveEnd);
+
+      return this;
+    }
+
+    /**
+     * Release the Element currently grabbed.
+     * @param  {Function} [cb=this.options.onRelease] A callback function that
+     * will be called when a target is released and transition has ended. It
+     * will get the target element as the argument.
+     * @return {this}
+     */
+
+  }, {
+    key: 'release',
+    value: function release() {
+      var _this3 = this;
+
+      var cb = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.options.onRelease;
+
+      if (!this.shown || this.lock) return;
+
+      var target$$1 = this.target.el;
+
+      this.options.onBeforeRelease(target$$1);
+
+      this.lock = true;
+      this.body.style.cursor = cursor.default;
+      this.target.restoreOpenStyle();
+
+      var onReleaseEnd = function onReleaseEnd() {
+        listen(target$$1, transEndEvent, onReleaseEnd, false);
+        _this3.lock = false;
+        _this3.released = true;
+        cb(target$$1);
+      };
+
+      listen(target$$1, transEndEvent, onReleaseEnd);
+
+      return this;
+    }
+  }]);
+  return Zooming;
+}();
+
+
+function toggleGrabListeners(el, handler$$1, add) {
+  var types = ['mousedown', 'mousemove', 'mouseup', 'touchstart', 'touchmove', 'touchend'];
+
+  types.forEach(function toggleListener(type) {
+    listen(el, type, handler$$1[type], add);
+  });
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Zooming);
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	(() => {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var [chunkIds, fn, priority] = deferred[i];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					result = fn();
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"/js/app": 0,
+/******/ 			"css/app": 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			for(moduleId in moreModules) {
+/******/ 				if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 					__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 				}
+/******/ 			}
+/******/ 			if(runtime) var result = runtime(__webpack_require__);
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkIds[i]] = 0;
+/******/ 			}
+/******/ 			return __webpack_require__.O(result);
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunkstatic_gallery_generator"] = self["webpackChunkstatic_gallery_generator"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+/******/ 	
+/******/ })()
+;

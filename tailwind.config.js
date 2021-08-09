@@ -1,15 +1,20 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
 const defaultConfig = require('tailwindcss/defaultConfig');
 const colors = require('tailwindcss/colors');
 
 module.exports = {
+    mode: 'jit',
     purge: [
         './resources/views/**/*.blade.php',
         './resources/css/**/*.css',
     ],
     theme: {
         extend: {
+            fontFamily: {
+                serif: ['Merriweather', ...defaultTheme.fontFamily.serif],
+            },
             colors: {
-                gray: colors.trueGray,
+                gray: colors.gray,
             },
             backgroundSize: {
                 ...defaultConfig.backgroundSize,
