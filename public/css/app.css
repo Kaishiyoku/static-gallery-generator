@@ -1,4 +1,4 @@
-/*! tailwindcss v2.2.7 | MIT License | https://tailwindcss.com *//*! modern-normalize v1.1.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
+/*! tailwindcss v2.2.15 | MIT License | https://tailwindcss.com *//*! modern-normalize v1.1.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
 
 /*
 Document
@@ -447,6 +447,18 @@ textarea::placeholder {
 button,
 [role="button"] {
   cursor: pointer;
+}
+
+/**
+ * Override legacy focus reset from Normalize with modern Firefox focus styles.
+ *
+ * This is actually an improvement over the new defaults in Firefox in our testing,
+ * as it triggers the better focus styles even for links, which still use a dotted
+ * outline in Firefox by default.
+ */
+ 
+:-moz-focusring {
+	outline: auto;
 }
 
 table {
@@ -917,27 +929,14 @@ video {
 	margin-left: auto;
 	margin-right: auto;
 }
-.my-8 {
-	margin-top: 2rem;
-	margin-bottom: 2rem;
-}
 .mt-4 {
 	margin-top: 1rem;
 }
-.mt-12 {
-	margin-top: 3rem;
+.mt-32 {
+	margin-top: 8rem;
 }
 .mb-8 {
 	margin-bottom: 2rem;
-}
-.mt-16 {
-	margin-top: 4rem;
-}
-.mt-20 {
-	margin-top: 5rem;
-}
-.mt-32 {
-	margin-top: 8rem;
 }
 .block {
 	display: block;
@@ -963,9 +962,6 @@ video {
 .max-w-none {
 	max-width: none;
 }
-.grid-cols-3 {
-	grid-template-columns: repeat(3, minmax(0, 1fr));
-}
 .grid-cols-2 {
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -984,14 +980,6 @@ video {
 .border {
 	border-width: 1px;
 }
-.border-gray-700 {
-	--tw-border-opacity: 1;
-	border-color: rgba(63, 63, 70, var(--tw-border-opacity));
-}
-.border-gray-300 {
-	--tw-border-opacity: 1;
-	border-color: rgba(212, 212, 216, var(--tw-border-opacity));
-}
 .border-gray-600 {
 	--tw-border-opacity: 1;
 	border-color: rgba(82, 82, 91, var(--tw-border-opacity));
@@ -999,10 +987,6 @@ video {
 .bg-gray-900 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(24, 24, 27, var(--tw-bg-opacity));
-}
-.bg-white {
-	--tw-bg-opacity: 1;
-	background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
 }
 .bg-gray-800 {
 	--tw-bg-opacity: 1;
@@ -1075,10 +1059,6 @@ video {
 	--tw-text-opacity: 1;
 	color: rgba(244, 244, 245, var(--tw-text-opacity));
 }
-.text-gray-700 {
-	--tw-text-opacity: 1;
-	color: rgba(63, 63, 70, var(--tw-text-opacity));
-}
 .text-gray-400 {
 	--tw-text-opacity: 1;
 	color: rgba(161, 161, 170, var(--tw-text-opacity));
@@ -1106,16 +1086,8 @@ video {
 	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 	transition-duration: 150ms;
 }
-.transition-all {
-	transition-property: all;
-	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-	transition-duration: 150ms;
-}
 .duration-500 {
 	transition-duration: 500ms;
-}
-.duration-300 {
-	transition-duration: 300ms;
 }
 .ease-in-out {
 	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -1137,19 +1109,9 @@ body {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
 }
 
-.hover\:border-gray-200:hover {
-	--tw-border-opacity: 1;
-	border-color: rgba(228, 228, 231, var(--tw-border-opacity));
-}
-
 .hover\:bg-white:hover {
 	--tw-bg-opacity: 1;
 	background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
-}
-
-.hover\:bg-gray-200:hover {
-	--tw-bg-opacity: 1;
-	background-color: rgba(228, 228, 231, var(--tw-bg-opacity));
 }
 
 .hover\:bg-gray-700:hover {
@@ -1161,29 +1123,9 @@ body {
 	--tw-bg-opacity: 0.3;
 }
 
-.hover\:text-gray-900:hover {
-	--tw-text-opacity: 1;
-	color: rgba(24, 24, 27, var(--tw-text-opacity));
-}
-
-.hover\:text-gray-500:hover {
-	--tw-text-opacity: 1;
-	color: rgba(113, 113, 122, var(--tw-text-opacity));
-}
-
 .hover\:text-gray-300:hover {
 	--tw-text-opacity: 1;
 	color: rgba(212, 212, 216, var(--tw-text-opacity));
-}
-
-.focus\:border-blue-300:focus {
-	--tw-border-opacity: 1;
-	border-color: rgba(147, 197, 253, var(--tw-border-opacity));
-}
-
-.focus\:border-blue-500:focus {
-	--tw-border-opacity: 1;
-	border-color: rgba(59, 130, 246, var(--tw-border-opacity));
 }
 
 .focus\:border-gray-500:focus {
@@ -1213,16 +1155,6 @@ body {
 	--tw-ring-color: rgba(255, 255, 255, var(--tw-ring-opacity));
 }
 
-.focus\:ring-blue-200:focus {
-	--tw-ring-opacity: 1;
-	--tw-ring-color: rgba(191, 219, 254, var(--tw-ring-opacity));
-}
-
-.focus\:ring-blue-600:focus {
-	--tw-ring-opacity: 1;
-	--tw-ring-color: rgba(37, 99, 235, var(--tw-ring-opacity));
-}
-
 .focus\:ring-gray-600:focus {
 	--tw-ring-opacity: 1;
 	--tw-ring-color: rgba(82, 82, 91, var(--tw-ring-opacity));
@@ -1232,19 +1164,9 @@ body {
 	--tw-ring-opacity: 0.5;
 }
 
-.active\:bg-gray-50:active {
-	--tw-bg-opacity: 1;
-	background-color: rgba(250, 250, 250, var(--tw-bg-opacity));
-}
-
 .active\:bg-gray-600:active {
 	--tw-bg-opacity: 1;
 	background-color: rgba(82, 82, 91, var(--tw-bg-opacity));
-}
-
-.active\:text-gray-800:active {
-	--tw-text-opacity: 1;
-	color: rgba(39, 39, 42, var(--tw-text-opacity));
 }
 
 .active\:text-gray-200:active {
@@ -1257,14 +1179,6 @@ body {
 }
 
 @media (min-width: 640px) {
-
-	.sm\:hidden {
-		display: none;
-	}
-
-	.sm\:grid-cols-2 {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
 
 	.sm\:text-xl {
 		font-size: 1.25rem;
