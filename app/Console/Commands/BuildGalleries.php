@@ -2,52 +2,23 @@
 
 namespace App\Console\Commands;
 
-use App\Gallery;
-use App\Image;
+use App\Data\Gallery;
+use App\Data\Image;
 use Closure;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Constraint;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\FileAttributes;
+use League\Flysystem\StorageAttributes;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 class BuildGalleries extends Command
 {
-    /**
-     * The maximum width in pixels image thumbnails should have
-     *
-     * @var int
-     */
-    private const MAX_THUMBNAIL_RESIZE_WIDTH = 1250;
-
-    /**
-     * The maximum width in pixels images should have
-     *
-     * @var int
-     */
-    private const MAX_IMAGE_RESIZE_WIDTH = 2500;
-
-    /**
-     * @var int
-     */
-    private const THUMBNAIL_QUALITY = 50;
-
-    /**
-     * @var int
-     */
-    private const IMAGE_QUALITY = 70;
-
-    /**
-     * Suffix of the thumbnail filenames
-     *
-     * @var string
-     */
-    public const THUMBNAIL_SUFFIX = '-thumbnail';
-
     /**
      * The name and signature of the console command.
      *
@@ -68,34 +39,16 @@ class BuildGalleries extends Command
     private $progressBar;
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
-        $localStorage = Storage::disk('local');
-        $publicAdapter = new Local(publicPath());
-        $publicFilesystem = new Filesystem($publicAdapter);
+        $galleries = collect(Storage::disk('local')->listContents('/galleries'))
+            ->filter(fn(StorageAttributes $data) => $data->isDir());
 
-        $galleries = collect($localStorage->listContents('/galleries'))
-            ->filter($this->filterByDir());
-
-        $totalNumberOfImages = $galleries->reduce(function ($accum, $galleryData) {
-            $images = $this->getImagesForGallery($galleryData);
-
-            return $accum + $images->count();
-        }, 0);
+        $totalNumberOfImages = $galleries->reduce(fn($accum, $galleryData) => $accum + $this->getImagesForGallery($galleryData)->count(), 0);
 
         $this->progressBar = $this->output->createProgressBar($totalNumberOfImages);
 
@@ -108,21 +61,11 @@ class BuildGalleries extends Command
 
         $indexPageView = view('index', ['galleries' => $galleries]);
 
-        $publicFilesystem->put('index.html', $indexPageView->toHtml());
+        Storage::disk('public')->put('index.html', $indexPageView->toHtml());
 
         $this->line('Finished.');
-    }
 
-    /**
-     * Filter for directories only
-     *
-     * @return Closure
-     */
-    private function filterByDir(): Closure
-    {
-        return function ($data) {
-            return $data['type'] === 'dir';
-        };
+        return 0;
     }
 
     /**
@@ -132,41 +75,39 @@ class BuildGalleries extends Command
      */
     private function mapGalleries(): Closure
     {
-        $localStorage = Storage::disk('local');
-        $publicAdapter = new Local(publicPath());
-        $publicFilesystem = new Filesystem($publicAdapter);
-
-        return function ($galleryData) use ($localStorage, $publicFilesystem) {
+        return function (DirectoryAttributes $galleryData) {
             $images = $this->getImagesForGallery($galleryData);
 
-            $images->each(function (Image $image) use ($publicFilesystem, $galleryData) {
+            $images->each(function (Image $image) use ($galleryData) {
                 if ($this->option('skip-images')) {
                     return;
                 }
 
                 $resizedThumbnailImageResponse = $this->resizeImage(
                     $image->getPath(),
-                    self::MAX_THUMBNAIL_RESIZE_WIDTH,
-                    self::THUMBNAIL_QUALITY
+                    config('gallery.max_thumbnail_resize_width'),
+                    config('gallery.thumbnail_quality')
                 );
                 $resizedImageResponse = $this->resizeImage(
                     $image->getPath(),
-                    self::MAX_IMAGE_RESIZE_WIDTH,
-                    self::IMAGE_QUALITY
+                    config('gallery.max_image_resize_width'),
+                    config('gallery.image_quality')
                 );
 
-                $publicFilesystem->put($image->getPathWithSlug(self::THUMBNAIL_SUFFIX), $resizedThumbnailImageResponse->getBody()->getContents());
-                $publicFilesystem->put($image->getPathWithSlug(), $resizedImageResponse->getBody()->getContents());
+                Storage::disk('public')->put($image->getPathWithSlug(config('gallery.thumbnail_suffix')), $resizedThumbnailImageResponse->getBody()->getContents());
+                Storage::disk('public')->put($image->getPathWithSlug(), $resizedImageResponse->getBody()->getContents());
+
+                $fileName = File::name($galleryData->path());
 
                 $this->progressBar->advance();
-                $this->output->write(" <info>Processed image for gallery \"{$galleryData['filename']}\": \"{$image->getFilename()}.{$image->getExtension()}\"</info>");
+                $this->output->write(" <info>Processed image for gallery \"{$fileName}\": \"{$image->getFilename()}.{$image->getExtension()}\"</info>");
             });
 
-            $galleryInfoPath = $galleryData['path'] . '/info.json';
+            $galleryInfoPath = $galleryData->path() . '/info.json';
 
-            $galleryInfoJsonStr = $localStorage->exists($galleryInfoPath) ? $localStorage->get($galleryInfoPath) : null;
+            $galleryInfoJsonStr = Storage::disk('local')->exists($galleryInfoPath) ? Storage::disk('local')->get($galleryInfoPath) : null;
 
-            return new Gallery($galleryData['basename'], $galleryData['dirname'], $galleryData['path'], $images, $galleryInfoJsonStr);
+            return new Gallery(File::basename($galleryData->path()), File::dirname($galleryData->path()), $galleryData->path(), $images, $galleryInfoJsonStr);
         };
     }
 
@@ -195,25 +136,14 @@ class BuildGalleries extends Command
     /**
      * Get the images from a gallery folder
      *
-     * @param array $galleryData
+     * @param StorageAttributes $galleryData
      * @return Collection<Image>
      */
-    private function getImagesForGallery(array $galleryData): Collection
+    private function getImagesForGallery(StorageAttributes $galleryData): Collection
     {
-        $localStorage = Storage::disk('local');
-
-        return collect($localStorage->listContents($galleryData['path']))
-            ->filter(function ($data) use ($localStorage) {
-                $mimetype = $localStorage->getMimetype($data['path']);
-
-                $isDirectory = $data['type'] === 'dir';
-                $isImage = Str::startsWith($mimetype, 'image/');
-
-                return !$isDirectory && $isImage;
-            })
-            ->map(function ($data) {
-                return Image::fromArray($data);
-            });
+        return collect(Storage::disk('local')->listContents($galleryData->path()))
+            ->filter(fn(StorageAttributes $data) => !$data->isDir() && Str::startsWith(Storage::disk('local')->mimeType($data->path()), 'image/'))
+            ->map(fn(FileAttributes $data) => Image::fromArray($data));
     }
 
     /**
@@ -223,13 +153,10 @@ class BuildGalleries extends Command
      */
     private function storeHtml(): Closure
     {
-        $publicAdapter = new Local(publicPath());
-        $publicFilesystem = new Filesystem($publicAdapter);
-
-        return function (Gallery $gallery) use ($publicFilesystem) {
+        return function (Gallery $gallery) {
             $view = view('gallery', ['gallery' => $gallery]);
 
-            $publicFilesystem->put($gallery->getPathWithSlug() . '.html', $view->toHtml());
+            Storage::disk('public')->put($gallery->getPathWithSlug() . '.html', $view->toHtml());
         };
     }
 }

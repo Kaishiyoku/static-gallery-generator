@@ -1,4 +1,4 @@
-import Zooming from 'zooming'
+import Zooming from 'zooming';
 
 document.addEventListener('DOMContentLoaded', () => {
     new Zooming({

@@ -1,11 +1,9 @@
 <?php
 
-use App\Image;
+use App\Data\Image;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
-use League\CommonMark\Converter;
-use League\CommonMark\DocParser;
-use League\CommonMark\Environment;
-use League\CommonMark\HtmlRenderer;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 use voku\helper\HtmlMin;
 
 if (!function_exists('publicPath')) {
@@ -63,11 +61,9 @@ if (!function_exists('parseMarkdown')) {
      */
     function parseMarkdown(string $text): string
     {
-        $environment = Environment::createCommonMarkEnvironment();
+        $markdownConverter = new GithubFlavoredMarkdownConverter();
 
-        $converter = new Converter(new DocParser($environment), new HtmlRenderer($environment));
-
-        return $converter->convertToHtml($text);
+        return $markdownConverter->convert($text);
     }
 }
 
