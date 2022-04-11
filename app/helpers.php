@@ -6,19 +6,6 @@ use Intervention\Image\ImageManager;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 use voku\helper\HtmlMin;
 
-if (!function_exists('publicPath')) {
-    /**
-     * Get the public path or a subfolder of it
-     *
-     * @param string|null $path
-     * @return string
-     */
-    function publicPath(?string $path = null): string
-    {
-        return rtrim(app()->basePath('public/' . $path), '/');
-    }
-}
-
 if (!function_exists('minifyHtml')) {
     /**
      * @param string $html
