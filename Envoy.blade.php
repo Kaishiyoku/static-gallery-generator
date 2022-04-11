@@ -60,6 +60,10 @@
     deployment_option_cleanup
 @endstory
 
+@story('build_galleries')
+    build_galleries
+@endstory
+
 @story('rollback')
     deployment_rollback
     health_check
@@ -161,6 +165,11 @@
     cd {{ $path }}/releases
     echo "Releases:"
     ls -d -t */ | cut -f1 -d'/'
+@endtask
+
+@task('build_galleries')
+    cd {{ $path }}/current
+    php artisan galleries:build
 @endtask
 
 {{--
