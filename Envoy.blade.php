@@ -106,8 +106,6 @@
 @endtask
 
 @task('deployment_finish')
-    php {{ $release }}/artisan storage:link
-    echo "Storage symbolic links created"
     ln -nfs {{ $release }} {{ $path }}/current
     echo "Deployment ({{ $date }}) finished"
 @endtask
