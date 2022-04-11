@@ -61,7 +61,9 @@
 @endstory
 
 @story('build_galleries')
+    change_storage_owner_to_deployment_user
     build_galleries
+    change_storage_owner_to_www_data
 @endstory
 
 @story('rollback')
