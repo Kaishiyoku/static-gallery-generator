@@ -61,7 +61,7 @@ class BuildGalleries extends Command
 
         $indexPageView = view('index', ['galleries' => $galleries]);
 
-        Storage::disk('public')->put('index.html', $indexPageView->toHtml());
+        Storage::disk('build')->put('index.html', $indexPageView->toHtml());
 
         $this->line('Finished.');
 
@@ -94,8 +94,8 @@ class BuildGalleries extends Command
                     config('gallery.image_quality')
                 );
 
-                Storage::disk('public')->put($image->getPathWithSlug(config('gallery.thumbnail_suffix')), $resizedThumbnailImageResponse->getBody()->getContents());
-                Storage::disk('public')->put($image->getPathWithSlug(), $resizedImageResponse->getBody()->getContents());
+                Storage::disk('build')->put($image->getPathWithSlug(config('gallery.thumbnail_suffix')), $resizedThumbnailImageResponse->getBody()->getContents());
+                Storage::disk('build')->put($image->getPathWithSlug(), $resizedImageResponse->getBody()->getContents());
 
                 $fileName = File::name($galleryData->path());
 
@@ -156,7 +156,7 @@ class BuildGalleries extends Command
         return function (Gallery $gallery) {
             $view = view('gallery', ['gallery' => $gallery]);
 
-            Storage::disk('public')->put($gallery->getPathWithSlug() . '.html', $view->toHtml());
+            Storage::disk('build')->put($gallery->getPathWithSlug() . '.html', $view->toHtml());
         };
     }
 }
