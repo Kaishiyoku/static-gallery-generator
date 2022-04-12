@@ -112,7 +112,7 @@
 @endtask
 
 @task('deployment_finish')
-    php artisan galleries:build
+    php {{ $release }}/artisan galleries:build
     php {{ $release }}/artisan storage:link
     echo "Storage symbolic links created"
     ln -nfs {{ $release }} {{ $path }}/current
