@@ -12,8 +12,8 @@
 
         @if (getImageDescriptionFor($gallery->getImages()->first()))
             <div class="container mx-auto px-8 pb-20">
-                <div class="relative bg-gray-900 bg-opacity-50" style="margin-top: -100px; min-height: 100px;"></div>
-                <div class="relative text-shadow p-4" style="margin-top: -100px; min-height: 100px;">
+                <div class="relative bg-gray-900 bg-opacity-50 -mt-[100px] min-h-[100px]"></div>
+                <div class="relative text-shadow p-4 -mt-[100px] min-h-[100px]">
                     {!! getImageDescriptionFor($gallery->getImages()->first()) !!}
                 </div>
             </div>
