@@ -54,6 +54,7 @@
     deployment_links
     deployment_composer
     deployment_npm
+    build_galleries
     deployment_finish
     change_storage_owner_to_www_data
     health_check
