@@ -12,12 +12,13 @@ module.exports = {
     ],
 
     theme: {
+        colors: {
+            gray: colors.gray,
+        },
+
         extend: {
             fontFamily: {
                 serif: ['Merriweather', ...defaultTheme.fontFamily.serif],
-            },
-            colors: {
-                gray: colors.gray,
             },
             backgroundSize: {
                 ...defaultConfig.backgroundSize,

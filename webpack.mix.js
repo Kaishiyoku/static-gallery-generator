@@ -16,3 +16,7 @@ mix.js('resources/js/app.js', '/js/')
         require('tailwindcss'),
     ])
     .setPublicPath('build');
+
+if (mix.inProduction()) {
+    mix.version();
+}
