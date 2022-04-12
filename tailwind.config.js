@@ -3,11 +3,14 @@ const defaultConfig = require('tailwindcss/defaultConfig');
 const colors = require('tailwindcss/colors');
 
 module.exports = {
-    mode: 'jit',
-    purge: [
+    content: [
+        './resources/js/**/*.js',
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+        './vendor/laravel/jetstream/**/*.blade.php',
+        './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
-        './resources/css/**/*.css',
     ],
+
     theme: {
         extend: {
             fontFamily: {
@@ -61,7 +64,7 @@ module.exports = {
             xl: '1280px',
         },
     },
-    variants: {},
+
     plugins: [
         require('@tailwindcss/typography'),
     ]
