@@ -1,4 +1,4 @@
-<div class="container mx-auto px-8">
+<div class="container mx-auto px-8 pt-8">
     @foreach ($gallery->getImages()->skip(1) as $i => $image)
         <div class="lg:flex pb-12">
             <div class="lg:w-1/2 lg:mr-4">

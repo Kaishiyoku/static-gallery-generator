@@ -1,15 +1,17 @@
 <div class="container mx-auto px-8">
     <div class="lg:flex">
-        @foreach ($images->chunk(2) as $chunk)
+        @foreach ($images->chunk(floor($images->count() / 2)) as $chunk)
             <div class="lg:px-4">
                 @foreach ($chunk as $image)
-                    <x-image :image="$image"/>
+                    <div class="pt-8">
+                        <x-image :image="$image"/>
 
-                    @if (getImageDescriptionFor($image))
-                        <div class="prose max-w-none text-justify pt-4 pb-20">
-                            {!! getImageDescriptionFor($image) !!}
-                        </div>
-                    @endif
+                        @if (getImageDescriptionFor($image))
+                            <div class="prose max-w-none text-justify pt-4 pb-20">
+                                {!! getImageDescriptionFor($image) !!}
+                            </div>
+                        @endif
+                    </div>
                 @endforeach
             </div>
         @endforeach
