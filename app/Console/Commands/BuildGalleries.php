@@ -147,6 +147,7 @@ class BuildGalleries extends Command
     {
         return collect(Storage::disk('local')->listContents($galleryData->path()))
             ->filter(fn(StorageAttributes $data) => !$data->isDir() && Str::startsWith(Storage::disk('local')->mimeType($data->path()), 'image/'))
+            ->sortBy('path')
             ->map(fn(FileAttributes $data) => Image::fromArray($data));
     }
 
