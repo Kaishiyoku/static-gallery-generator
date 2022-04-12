@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('title', 'Galleries')
+@section('title', config('app.name') ?: 'Galleries')
 
 @section('content')
     <div class="sm:p-2 mx-auto">
