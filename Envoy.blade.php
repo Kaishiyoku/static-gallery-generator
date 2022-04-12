@@ -54,7 +54,6 @@
     deployment_links
     deployment_composer
     deployment_npm
-    build_galleries
     deployment_finish
     change_storage_owner_to_www_data
     health_check
@@ -113,6 +112,7 @@
 @endtask
 
 @task('deployment_finish')
+    php artisan galleries:build
     php {{ $release }}/artisan storage:link
     echo "Storage symbolic links created"
     ln -nfs {{ $release }} {{ $path }}/current
