@@ -2,97 +2,79 @@
 
 namespace App\Data;
 
+use ColorThief\Color;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class Gallery
 {
-    /**
-     * @var string
-     */
-    private $basename;
+    private string $basename;
 
-    /**
-     * @var string
-     */
-    private $dirname;
+    private string $dirname;
 
-    /**
-     * @var string
-     */
-    private $path;
+    private string $path;
 
     /**
      * @var Collection<Image>
      */
-    private $images;
+    private Collection $images;
 
-    /**
-     * @var GalleryInfo|null
-     */
-    private $galleryInfo = null;
+    private Color $prominentColor;
 
-    /**
-     * @param string $basename
-     * @param string $dirname
-     * @param string $path
-     * @param Collection $images
-     * @param string|null $galleryInfoJsonStr
-     */
-    public function __construct(string $basename, string $dirname, string $path, Collection $images, string $galleryInfoJsonStr = null)
+    private ?GalleryInfo $galleryInfo = null;
+
+    public function __construct(string $basename, string $dirname, string $path, Collection $images, Color $prominentColor, string $galleryInfoJsonStr = null)
     {
         $this->basename = $basename;
         $this->dirname = $dirname;
         $this->path = $path;
         $this->images = $images;
+        $this->prominentColor = $prominentColor;
         $this->galleryInfo = GalleryInfo::fromJsonStr($galleryInfoJsonStr);
     }
 
-    /**
-     * @return string
-     */
     public function getBasename(): string
     {
         return $this->basename;
     }
 
-    /**
-     * @return string
-     */
     public function getDirname(): string
     {
         return $this->dirname;
     }
 
-    /**
-     * @return string
-     */
     public function getPath(): string
     {
         return $this->path;
     }
 
-    /**
-     * @return Collection
-     */
     public function getImages(): Collection
     {
         return $this->images;
     }
 
-    /**
-     * @return GalleryInfo|null
-     */
+    public function getProminentColor(): Color
+    {
+        return $this->prominentColor;
+    }
+
     public function getGalleryInfo(): ?GalleryInfo
     {
         return $this->galleryInfo;
     }
 
-    /**
-     * @return string
-     */
     public function getPathWithSlug(): string
     {
         return $this->getDirname() . '/' . Str::slug($this->getBasename());
+    }
+
+    public function getCssClassName(): string
+    {
+        return 'gallery-' . Str::slug($this->getBaseName());
+    }
+
+    public function getProminentColorAsRgba(float $alpha): string
+    {
+        return 'rgba(' . implode(', ', $this->getProminentColor()->getArray()) . ', ' . $alpha . ')';
     }
 }

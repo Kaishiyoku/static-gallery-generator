@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Data\Gallery;
 use App\Data\Image;
 use Closure;
+use ColorThief\ColorThief;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
@@ -78,7 +79,10 @@ class BuildGalleries extends Command
         return function (DirectoryAttributes $galleryData) {
             $images = $this->getImagesForGallery($galleryData);
 
-            $images->each(function (Image $image) use ($galleryData) {
+            $imageFile = Storage::disk('local')->get($images->first()->getPath());
+            $prominentColor = ColorThief::getColor($imageFile, 10, null, 'obj');
+
+            $images->each(function (Image $image, int $index) use ($galleryData) {
                 if ($this->option('skip-images')) {
                     return;
                 }
@@ -107,7 +111,7 @@ class BuildGalleries extends Command
 
             $galleryInfoJsonStr = Storage::disk('local')->exists($galleryInfoPath) ? Storage::disk('local')->get($galleryInfoPath) : null;
 
-            return new Gallery(File::basename($galleryData->path()), File::dirname($galleryData->path()), $galleryData->path(), $images, $galleryInfoJsonStr);
+            return new Gallery(File::basename($galleryData->path()), File::dirname($galleryData->path()), $galleryData->path(), $images, $prominentColor, $galleryInfoJsonStr);
         };
     }
 
