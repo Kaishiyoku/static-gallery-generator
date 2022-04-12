@@ -46,7 +46,7 @@ return [
 
         'build' => [
             'driver' => 'local',
-            'root' => app_path('build'),
+            'root' => base_path('build'),
             'url' => env('APP_URL'),
             'visibility' => 'public',
             'throw' => false,
